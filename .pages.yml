@@ -1,0 +1,31 @@
+media:
+  input: public/images/blog
+  output: /images/blog
+  categories: [image]
+
+content:
+  - name: posts
+    label: Blog posts
+    type: collection
+    path: src/content/blog
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    exclude: ["using-mdx.mdx"]
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: description
+        label: Short description
+        type: text
+        required: true
+      - name: pubDate
+        label: Publication date
+        type: date
+        required: true
+      - name: body
+        label: Post body
+        type: rich-text
+        options:
+          format: markdown
