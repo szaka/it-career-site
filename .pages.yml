@@ -24,6 +24,10 @@ content:
         label: Publication date
         type: date
         required: true
+      - name: tags
+        label: Tags
+        type: string
+        list: true
       - name: body
         label: Post body
         type: rich-text
