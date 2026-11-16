@@ -1,0 +1,18 @@
+---
+import PortfolioPage from '../layouts/PortfolioPage.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<PortfolioPage title="Projects | Shahid Zaka" description="Selected hands-on IT projects by Shahid Zaka.">
+  <h1>Projects</h1>
+  <section class="portfolio-section" id="astro-portfolio">
+    <h2>Building and deploying this site</h2>
+    <p>I set up a static Astro site, connected it to GitHub Pages, and configured GitHub Actions to build and deploy it from the main branch.</p>
+    <p>During testing, I fixed navigation and post links so they worked under the repository path. I verified the fix by opening a post from the deployed blog listing.</p>
+    <p class="portfolio-links">
+      <a href={`${base}/blog/setting-up-my-astro-blog/`}>Read the write-up</a>
+      <a href="https://github.com/szaka/it-career-site">View on GitHub</a>
+    </p>
+  </section>
+</PortfolioPage>
