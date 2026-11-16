@@ -2,11 +2,13 @@
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 import '../styles/portfolio.css';
+import '../styles/warm-stone.css';
 import '../styles/article-reading.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
+<a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="portfolio-header">
   <nav aria-label="Main navigation">
     <a class="site-name" href={`${base}/`}>{SITE_TITLE}</a>
@@ -14,6 +16,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <HeaderLink href={`${base}/projects/`}>Projects</HeaderLink>
       <HeaderLink href={`${base}/blog/`}>Blog</HeaderLink>
       <HeaderLink href={`${base}/about/`}>About</HeaderLink>
+      <HeaderLink href={`${base}/contact/`}>Contact</HeaderLink>
     </div>
   </nav>
 </header>
@@ -32,16 +35,23 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       button.type = 'button';
       button.className = 'code-copy-button';
       button.textContent = 'Copy code';
+
+      const copyStatus = document.createElement('span');
+      copyStatus.className = 'code-copy-status';
+      copyStatus.setAttribute('role', 'status');
+      copyStatus.setAttribute('aria-atomic', 'true');
       button.addEventListener('click', async () => {
         try {
           await navigator.clipboard.writeText(code.textContent?.trimEnd() ?? '');
           button.textContent = 'Copied';
+          copyStatus.textContent = 'Code copied to clipboard.';
         } catch {
           button.textContent = 'Select code to copy';
+          copyStatus.textContent = 'Could not copy automatically. Select the code to copy it.';
         }
       });
 
-      group.append(button, pre);
+      group.append(button, copyStatus, pre);
     }
   }
 </script>

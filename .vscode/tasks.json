@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Portfolio: Check Entry",
+      "type": "process",
+      "command": "bash",
+      "args": ["scripts/report-entry.sh", "${input:projectId}", "${input:postSlug}"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Portfolio: Check and Publish Entry",
+      "type": "process",
+      "command": "bash",
+      "args": ["scripts/publish-entry.sh", "${input:projectId}", "${input:postSlug}"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "projectId",
+      "type": "promptString",
+      "description": "Project ID from src/data/topics.ts",
+      "default": "astro-portfolio"
+    },
+    {
+      "id": "postSlug",
+      "type": "promptString",
+      "description": "Blog filename without .md",
+      "default": "setting-up-my-astro-blog"
+    }
+  ]
+}

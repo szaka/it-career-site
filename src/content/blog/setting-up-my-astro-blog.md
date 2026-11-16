@@ -2,6 +2,8 @@
 title: 'Fixing Astro links on GitHub Pages'
 description: 'How I traced a broken blog link to the GitHub Pages base path and verified the fix in the generated HTML.'
 pubDate: '2026-11-15'
+tags: ["Troubleshooting", "GitHub Pages"]
+aiDisclosure: "I used ChatGPT to suggest the base-path fix and help draft this write-up. I applied the change, ran the build, inspected the generated link, and tested it on GitHub Pages."
 ---
 
 I deployed my Astro portfolio as a GitHub Pages project site. The blog listing loaded under `/it-career-site/blog/`, but clicking a post sent the browser to `/blog/…` at the domain root.
@@ -36,7 +38,3 @@ The link sits inside the page’s existing `posts.map(...)` loop, where `post` i
 I rebuilt and reran the same check. This time the output showed `href="/it-career-site/blog/setting-up-my-astro-blog/"`. After pushing, I opened the deployed blog listing and followed the link to the article.
 
 [View the changes in commit `1096d83`](https://github.com/szaka/it-career-site/commit/1096d83).
-
-<aside class="ai-note" aria-label="AI assistance">
-  <p><strong>AI assistance.</strong> I used ChatGPT to suggest the base-path fix and help draft this write-up. I applied the change, ran the build, inspected the generated link, and tested it on GitHub Pages.</p>
-</aside>

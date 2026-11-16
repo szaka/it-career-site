@@ -1,0 +1,210 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<div class="analytics-settings" data-analytics-consent>
+  <button type="button" data-preferences aria-expanded="false"
+    aria-controls="analytics-notice" hidden data-footer-preference>Manage analytics preferences</button>
+
+  <section id="analytics-notice" class="analytics-notice"
+    aria-labelledby="analytics-title" hidden>
+    <h2 id="analytics-title">Optional analytics</h2>
+    <p>If you allow it, Google Analytics uses cookies to help me understand
+      which pages people visit. You can change your choice anytime in the footer.</p>
+    <div class="analytics-actions">
+      <button type="button" data-choice="allow">Allow analytics</button>
+      <button type="button" data-choice="reject">Reject analytics</button>
+      <a href={`${base}/privacy/`}>Privacy</a>
+    </div>
+  </section>
+  <span class="analytics-status" role="status"></span>
+</div>
+
+<style>
+  .analytics-settings { width: 100%; }
+  .analytics-settings [hidden] { display: none !important; }
+  .analytics-notice {
+    margin-block: .6rem;
+    padding: .9rem;
+    border: 1px solid var(--pj-line);
+    border-radius: .5rem;
+    background: var(--pj-card);
+    color: var(--pj-ink);
+  }
+  .analytics-notice.first-visit {
+    box-sizing: border-box;
+    width: min(calc(100% - 2rem), 43rem);
+    margin-inline: auto;
+  }
+  .analytics-notice h2 {
+    margin: 0 0 .35rem;
+    font-size: 1.15rem;
+  }
+  .analytics-notice p {
+    max-width: 65ch;
+    margin: 0 0 .55rem;
+  }
+  .analytics-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem .75rem;
+  }
+  .analytics-settings button {
+    min-height: 44px;
+    padding: .25rem .65rem;
+    border: 1px solid var(--pj-link);
+    border-radius: .35rem;
+    color: var(--pj-ink);
+    background: var(--pj-card);
+    font: inherit;
+    cursor: pointer;
+  }
+  .analytics-settings button:hover {
+    background: var(--pj-tint);
+  }
+  .analytics-settings :focus-visible {
+    outline: 2px solid var(--pj-link);
+    outline-offset: 3px;
+  }
+  .analytics-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>
+
+<script>
+  const consent = document.querySelector<HTMLElement>('[data-analytics-consent]');
+  const notice = consent?.querySelector<HTMLElement>('#analytics-notice');
+  const preferences = consent?.querySelector<HTMLButtonElement>('[data-preferences]');
+  const status = consent?.querySelector<HTMLElement>('.analytics-status');
+
+  const id = 'G-PSX1XWCWD7';
+  const key = 'portfolio-analytics-consent-v1';
+  const disableKey = 'ga-disable-' + id;
+  const liveSite = import.meta.env.PROD &&
+    (location.hostname === 'szaka.co' || location.hostname === 'www.szaka.co');
+
+  const analytics = window as Window & Record<string, unknown> & {
+    dataLayer?: unknown[];
+  };
+
+  analytics[disableKey] = true;
+  let choice = '';
+  try { choice = localStorage.getItem(key) ?? ''; } catch {}
+
+  function loadAnalytics() {
+    if (!liveSite || choice !== 'allow' || document.getElementById('portfolio-ga4')) return;
+
+    analytics[disableKey] = false;
+    analytics.dataLayer ??= [];
+    function gtag(..._args: unknown[]) {
+      analytics.dataLayer?.push(arguments);
+    }
+    gtag('js', new Date());
+    gtag('config', id, {
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false,
+    });
+
+    const tag = document.createElement('script');
+    tag.id = 'portfolio-ga4';
+    tag.async = true;
+    tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+    document.head.append(tag);
+  }
+
+  function clearAnalyticsCookies() {
+    for (const cookie of document.cookie.split(';')) {
+      const name = cookie.trim().split('=')[0];
+      if (name !== '_ga' && !name.startsWith('_ga_')) continue;
+      const expiry = name + '=; Max-Age=0; Path=/';
+      document.cookie = expiry;
+      if (liveSite) {
+        document.cookie = expiry + '; Domain=szaka.co';
+        document.cookie = expiry + '; Domain=' + location.hostname;
+      }
+    }
+  }
+
+  if (notice && preferences && status) {
+    const showNotice = (show: boolean) => {
+      notice.hidden = !show;
+      preferences.setAttribute('aria-expanded', String(show));
+    };
+
+    preferences.hidden = false;
+    const firstVisit = choice !== 'allow' && choice !== 'reject';
+    if (firstVisit) {
+      const header = document.querySelector('.portfolio-header');
+      if (header) {
+        header.after(notice);
+        notice.classList.add('first-visit');
+      }
+    }
+    showNotice(firstVisit);
+    if (choice === 'allow') loadAnalytics();
+
+    preferences.addEventListener('click', () => {
+      if (notice.classList.contains('first-visit')) {
+        notice.classList.remove('first-visit');
+        preferences.after(notice);
+        showNotice(true);
+      } else {
+        showNotice(notice.hidden);
+      }
+      if (!notice.hidden) notice.querySelector('button')?.focus();
+    });
+
+    for (const link of document.querySelectorAll('[data-open-analytics]')) {
+      link.addEventListener('click', (event) => {
+        const settings = document.getElementById('footer-settings');
+        const toggle = document.querySelector<HTMLButtonElement>('[data-footer-settings-toggle]');
+        if (!settings || !toggle) return;
+        event.preventDefault();
+        if (settings.hidden) toggle.click();
+        if (notice.hidden || notice.classList.contains('first-visit')) preferences.click();
+        else notice.querySelector('button')?.focus();
+      });
+    }
+
+    window.addEventListener('storage', (event) => {
+      if ((event.key !== key && event.key !== null) || event.newValue === 'allow') return;
+      choice = event.newValue ?? '';
+      analytics[disableKey] = true;
+      clearAnalyticsCookies();
+      if (document.getElementById('portfolio-ga4')) location.reload();
+    });
+
+    for (const button of notice.querySelectorAll<HTMLButtonElement>('[data-choice]')) {
+      button.addEventListener('click', () => {
+        const wasActive = Boolean(document.getElementById('portfolio-ga4'));
+        choice = button.dataset.choice === 'allow' ? 'allow' : 'reject';
+        try { localStorage.setItem(key, choice); } catch {}
+
+        if (choice === 'allow') {
+          loadAnalytics();
+          status.textContent = 'Analytics allowed.';
+        } else {
+          analytics[disableKey] = true;
+          clearAnalyticsCookies();
+          status.textContent = 'Analytics rejected.';
+        }
+
+        notice.classList.remove('first-visit');
+        preferences.after(notice);
+        showNotice(false);
+        const settings = document.getElementById('footer-settings');
+        if (settings?.hidden) {
+          document.querySelector<HTMLButtonElement>('[data-footer-settings-toggle]')?.focus();
+        }
+        else preferences.focus();
+        if (choice === 'reject' && wasActive) location.reload();
+      });
+    }
+  }
+</script>

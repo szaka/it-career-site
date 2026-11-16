@@ -68,7 +68,7 @@ body:has(.portfolio-header) article .prose pre {
   margin: 0;
   padding: 0;
   background: transparent !important;
-  color: #26352f !important;
+  color: var(--pj-ink, #26352f) !important;
 }
 
 body:has(.portfolio-header) article .prose pre code,

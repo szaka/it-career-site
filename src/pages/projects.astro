@@ -1,35 +1,197 @@
 ---
 import PortfolioPage from '../layouts/PortfolioPage.astro';
+import ReadingTime from '../components/ReadingTime.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import SortList from '../components/SortList.astro';
+import '../styles/entry-listings.css';
+import TopicLinks from '../components/TopicLinks.astro';
+import { projectReadingBody, projectTopics } from '../data/topics';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const filters = [...new Set(projectTopics.flatMap((project) => project.tags))];
 ---
 
-<PortfolioPage title="Projects | Shahid Zaka" description="Hands-on projects in static-site deployment and content publishing.">
-  <h1>Projects</h1>
-  <p class="portfolio-intro">Each project documents what I built, the problem I worked through, and how I checked the result.</p>
+<PortfolioPage title="Projects | Shahid Zaka" description="Hands-on IT projects by Shahid Zaka.">
+  <div id="project-gallery">
+    <h1>Projects</h1>
+    <p class="portfolio-intro">What I built and how I verified it.</p>
 
-  <section class="portfolio-section" id="astro-portfolio">
-    <h2><a href={`${base}/blog/setting-up-my-astro-blog/`}>Deploying the Astro portfolio</a></h2>
-    <p>I set up this Astro site and created a GitHub Actions workflow to build and publish it from the <code>main</code> branch.</p>
-    <p><strong>What I fixed.</strong> The blog listing linked to the domain root. On GitHub Pages, this site was served under <code>/it-career-site/</code>, so the post link led outside the site.</p>
-    <p><strong>How I verified it.</strong> I checked the generated HTML after rebuilding, then opened the article from the deployed blog listing.</p>
-    <p class="portfolio-links">
-      <a href={`${base}/blog/setting-up-my-astro-blog/`}>Read the link troubleshooting case study</a>
-      <a href="https://github.com/szaka/it-career-site/commit/1096d83">View the fix on GitHub</a>
+    <div class="project-toolbar entry-toolbar" data-project-toolbar hidden>
+      <div class="project-filters" role="group" aria-label="Filter projects by topic">
+        <button type="button" data-filter="" aria-pressed="true">All projects</button>
+        {filters.map((tag) => (
+          <button type="button" data-filter={tag} aria-pressed="false">{tag}</button>
+        ))}
+      </div>
+      <label class="project-search entry-search">
+        Search projects
+        <input type="search" data-project-search placeholder="Title, tool, or topic" />
+      </label>
+      <SortList listId="project-list" defaultLabel="Featured first" />
+    </div>
+
+    <p class="project-count" role="status" data-project-count>
+      {projectTopics.length} {projectTopics.length === 1 ? 'project' : 'projects'}
     </p>
-    <aside class="ai-note" aria-label="AI assistance">
-      <p><strong>AI assistance.</strong> I used ChatGPT to draft the theme code and suggest the base-path fix. I applied the changes, built the site, and tested the deployed link.</p>
-    </aside>
-  </section>
 
-  <section class="portfolio-section" id="browser-editing">
-    <h2><a href={`${base}/blog/syncing-pages-cms-with-astro/`}>Setting up browser-based editing</a></h2>
-    <p>I configured Pages CMS to edit Astro Markdown posts through a browser. I set up separate title, description, date, and body fields.</p>
-    <p><strong>What I learned.</strong> An edit saved in the CMS went to GitHub first. My local Astro preview showed the previous version until I pulled the commit into the folder the dev server was using.</p>
-    <p><strong>How I verified it.</strong> I pulled the updated post, refreshed the local preview, and checked that my edit appeared.</p>
-    <p><a href={`${base}/blog/syncing-pages-cms-with-astro/`}>Read the Pages CMS sync walkthrough</a></p>
-    <aside class="ai-note" aria-label="AI assistance">
-      <p><strong>AI assistance.</strong> I used ChatGPT to draft the CMS configuration and help diagnose the stale preview. I saved the edit and verified it locally after pulling.</p>
-    </aside>
-  </section>
+    <div id="project-list" class="project-grid">
+      {projectTopics.map((project) => (
+        <section class="project-card" id={project.id} data-sort-title={project.title}
+          data-project-tags={JSON.stringify(project.tags)}
+          data-project-searchable={[project.title, project.summary, ...project.tags].join(' ')}>
+          <h2><a href={`${base}/projects/${project.id}/`}>{project.title}</a></h2>
+          <div class="entry-meta">
+            <span class="entry-facts">
+              {project.verifiedDate && <FormattedDate date={new Date(project.verifiedDate + 'T00:00:00Z')} />}
+              <ReadingTime body={projectReadingBody(project)} />
+            </span>
+          </div>
+          <p class="project-summary">{project.summary}</p>
+          <p class="project-verification">{project.verification}</p>
+          <div class="entry-meta"><TopicLinks tags={project.tags} /></div>
+        </section>
+      ))}
+    </div>
+
+    <div data-project-empty hidden>
+      <p>No matching projects</p>
+      <button type="button" data-project-reset>Clear search and filters</button>
+    </div>
+
+  </div>
 </PortfolioPage>
+
+<style is:global>
+  body:has(#project-gallery) :is(.portfolio-header, .breadcrumbs, .portfolio-footer, #project-gallery) a {
+    color: var(--pj-link);
+  }
+
+  body:has(#project-gallery) :is(.portfolio-header nav, .portfolio-footer) {
+    border-color: var(--pj-line);
+  }
+
+  body:has(#project-gallery) :is(.breadcrumbs, .portfolio-footer) {
+    color: var(--pj-muted);
+  }
+
+  #project-gallery :is(h1, h2) { color: var(--pj-ink); font-weight: 400; }
+  #project-gallery [hidden] { display: none !important; }
+
+  #project-gallery :is(.project-toolbar, .project-filters) {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: .45rem;
+  }
+
+  #project-gallery .project-toolbar { gap: .8rem; }
+  #project-gallery .project-search { display: grid; gap: .25rem; font-size: .875rem; }
+  #project-gallery .project-count { margin-block: .75rem .25rem; }
+  #project-gallery :is(.project-count, .project-context, .project-verification, .entry-meta, .project-appearance) {
+    color: var(--pj-muted);
+    font-size: .875rem;
+  }
+
+  #project-gallery :is(button, input, select) {
+    min-height: 2.75rem;
+    max-width: 100%;
+    padding: .35rem .65rem;
+    border: 1px solid var(--pj-line);
+    border-radius: .35rem;
+    background: var(--pj-card);
+    color: var(--pj-ink);
+    font: inherit;
+    font-size: .875rem;
+  }
+
+  #project-gallery button { cursor: pointer; }
+  #project-gallery button[aria-pressed="true"] { background: var(--pj-tint); font-weight: 600; }
+
+  #project-gallery .project-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  #project-gallery .project-card {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 1.15rem;
+    border: 1px solid var(--pj-line);
+    border-radius: .6rem;
+    background: var(--pj-card);
+  }
+
+  #project-gallery .project-card h2 { margin-bottom: .35rem; }
+  #project-gallery .project-context { margin-bottom: .35rem; }
+  #project-gallery .entry-facts { flex-wrap: wrap; white-space: normal; }
+  #project-gallery .topic-links a {
+    display: inline-block;
+    background: var(--pj-tint);
+    border-radius: .25rem;
+    padding: .15rem .45rem;
+  }
+
+  #project-gallery .project-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .65rem;
+    min-height: 2.75rem;
+    margin-top: auto;
+    border-top: 1px solid var(--pj-line);
+    font-weight: 550;
+  }
+
+  #project-gallery .project-appearance { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.25rem; }
+  #project-gallery :focus-visible { outline: 2px solid var(--pj-link); outline-offset: 3px; }
+
+  @media (max-width: 43rem) {
+    #project-gallery .project-grid { grid-template-columns: 1fr; }
+    #project-gallery .project-search { width: 100%; }
+    #project-gallery .project-search input { width: 100%; }
+  }
+</style>
+
+<script>
+  const gallery = document.getElementById('project-gallery');
+  const search = gallery?.querySelector<HTMLInputElement>('[data-project-search]');
+  const count = gallery?.querySelector<HTMLElement>('[data-project-count]');
+  const empty = gallery?.querySelector<HTMLElement>('[data-project-empty]');
+
+  if (gallery && search && count && empty) {
+    const buttons = Array.from(gallery.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const cards = Array.from(gallery.querySelectorAll<HTMLElement>('[data-project-tags]'));
+    let selected = '';
+
+    const update = () => {
+      const words = search.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+      let visible = 0;
+      for (const card of cards) {
+        const tags: string[] = JSON.parse(card.dataset.projectTags ?? '[]');
+        const text = (card.dataset.projectSearchable ?? '').toLowerCase();
+        card.hidden = (selected !== '' && !tags.includes(selected)) || !words.every((word) => text.includes(word));
+        if (!card.hidden) visible++;
+      }
+      for (const button of buttons) button.setAttribute('aria-pressed', String(button.dataset.filter === selected));
+      count.textContent = visible === 1 ? '1 project' : `${visible} projects`;
+      empty.hidden = visible !== 0;
+    };
+
+    for (const button of buttons) button.addEventListener('click', () => {
+      selected = button.dataset.filter ?? '';
+      update();
+    });
+    search.addEventListener('input', update);
+    gallery.querySelector('[data-project-reset]')?.addEventListener('click', () => {
+      selected = '';
+      search.value = '';
+      update();
+      search.focus();
+    });
+
+    gallery.querySelector('[data-project-toolbar]')?.removeAttribute('hidden');
+    update();
+  }
+</script>

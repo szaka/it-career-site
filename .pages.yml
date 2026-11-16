@@ -28,6 +28,9 @@ content:
         label: Tags
         type: string
         list: true
+      - name: aiDisclosure
+        label: AI assistance
+        type: text
       - name: body
         label: Post body
         type: rich-text

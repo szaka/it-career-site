@@ -1,0 +1,49 @@
+---
+import PortfolioPage from '../../layouts/PortfolioPage.astro';
+import ReadingTime from '../../components/ReadingTime.astro';
+import AiDisclosure from '../../components/AiDisclosure.astro';
+import FormattedDate from '../../components/FormattedDate.astro';
+import TopicLinks from '../../components/TopicLinks.astro';
+import { projectReadingBody, projectTopics } from '../../data/topics';
+
+export function getStaticPaths() {
+  return projectTopics.map((project) => ({
+    params: { project: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<PortfolioPage
+  title={`${project.title} | Shahid Zaka`}
+  description={project.summary}
+  parent={{ label: 'Projects', href: `${base}/projects/` }}
+>
+  <h1>{project.title}</h1>
+  <div class="entry-meta">
+    <span class="entry-facts">
+          {project.verifiedDate && <FormattedDate date={new Date(project.verifiedDate + 'T00:00:00Z')} />}
+          <ReadingTime body={projectReadingBody(project)} />
+        </span>
+    <TopicLinks tags={project.tags} />
+  </div>
+
+  <AiDisclosure text={project.ai} />
+  <p class="portfolio-intro">{project.summary}</p>
+
+  <section class="portfolio-section" aria-label="Project results">
+    {project.fix && <p><strong>What I fixed.</strong> {project.fix}</p>}
+    <p><strong>How I verified it.</strong> {project.verification}</p>
+    {project.lesson && <p><strong>What I learned.</strong> {project.lesson}</p>}
+    {project.evidence && (
+      <p><small><a href={project.evidence.url}>{project.evidence.label}</a></small></p>
+    )}
+  </section>
+
+  {project.article && (
+    <p><a href={`${base}/blog/${project.article.slug}/`}>{project.article.label}</a></p>
+  )}
+</PortfolioPage>

@@ -1,7 +1,11 @@
 ---
+import ReadingTime from '../../components/ReadingTime.astro';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 import PortfolioPage from '../../layouts/PortfolioPage.astro';
+import TopicLinks from '../../components/TopicLinks.astro';
+import SortList from '../../components/SortList.astro';
+import '../../styles/entry-listings.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const starterPosts = new Set([
@@ -9,18 +13,227 @@ const starterPosts = new Set([
 ]);
 const posts = (await getCollection('blog'))
   .filter((post) => !starterPosts.has(post.id))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || a.data.title.localeCompare(b.data.title));
 ---
 
 <PortfolioPage title="Blog | Shahid Zaka" description="IT support labs, troubleshooting notes, and project write-ups.">
   <h1>Blog</h1>
-  <ul class="portfolio-posts">
+  <p class="portfolio-intro">Notes from my IT support labs and projects. I share what went wrong, what I checked, and how I verified the fix.</p>
+  <div id="blog-toolbar" class="blog-search entry-toolbar" data-blog-search-controls hidden>
+    <label class="entry-search" for="blog-search">
+      Search posts
+      <input type="search" id="blog-search" placeholder="Title, summary, or topic" />
+    </label>
+      <SortList listId="blog-posts" defaultLabel="Newest first" />
+    <p data-blog-search-status role="status"></p>
+    <button type="button" data-blog-search-reset hidden>Clear search</button>
+  </div>
+  <ul class="portfolio-posts" id="blog-posts">
     {posts.map((post) => (
-      <li class="portfolio-section">
+      <li class="portfolio-section" data-sort-title={post.data.title}
+        data-blog-topics={JSON.stringify(post.data.tags ?? [])} data-blog-searchable={[post.data.title, post.data.description, ...(post.data.tags ?? [])].join(' ')}>
         <h2><a href={`${base}/blog/${post.id}/`}>{post.data.title}</a></h2>
-        <p class="portfolio-date"><FormattedDate date={post.data.pubDate} /></p>
+        <div class="entry-meta">
+          <span class="entry-facts"><FormattedDate date={post.data.pubDate} /><ReadingTime body={post.body} /></span>
+        </div>
         <p>{post.data.description}</p>
+        <div class="entry-meta"><TopicLinks tags={post.data.tags ?? []} /></div>
       </li>
     ))}
   </ul>
 </PortfolioPage>
+
+
+<style>
+  .blog-topic-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+  }
+
+  .blog-search .blog-topic-filters button[aria-pressed="true"] {
+    background: var(--pj-ink);
+    color: var(--pj-card);
+    font-weight: 600;
+  }
+
+  @media (min-width: 42rem) {
+    .blog-search[data-blog-search-controls] {
+      grid-template-columns: minmax(0, 1fr) minmax(11rem, 15rem);
+      column-gap: .75rem;
+    }
+
+    .blog-search > .blog-topic-filters {
+      grid-area: 1 / 1 / span 2;
+      align-self: end;
+    }
+
+    .blog-search > label,
+    .blog-search > #blog-search {
+      grid-column: 2;
+    }
+
+    .blog-search > [data-blog-search-status],
+    .blog-search > [data-blog-search-reset] {
+      grid-column: 1 / -1;
+    }
+  }
+
+  .blog-search {
+    display: grid;
+    justify-items: start;
+    gap: .35rem;
+    margin-block: 1rem;
+    font-size: .9375rem;
+  }
+
+  .blog-search [hidden], .blog-search[hidden], #blog-posts > li[hidden] {
+    display: none !important;
+  }
+
+  .blog-search input, .blog-search button {
+    min-height: 44px;
+    padding: .35rem .65rem;
+    border: 1px solid var(--pj-link);
+    border-radius: .35rem;
+    background: var(--pj-card);
+    color: var(--pj-ink);
+    font: inherit;
+  }
+
+  .blog-search input { width: min(100%, 24rem); }
+  .blog-search input::placeholder { color: var(--pj-muted); }
+  .blog-search button { cursor: pointer; }
+  .blog-search p { margin: 0; color: var(--pj-muted); }
+
+  /* Match the Projects toolbar. */
+  .blog-search[data-blog-search-controls] {
+    justify-items: start;
+    align-items: end;
+    row-gap: .35rem;
+    font-size: .875rem;
+  }
+
+  .blog-search .blog-topic-filters {
+    gap: .45rem;
+  }
+
+  .blog-search .blog-topic-filters button,
+  .blog-search #blog-search {
+    box-sizing: border-box;
+    min-height: 44px;
+    border-color: var(--pj-border, color-mix(in srgb, var(--pj-ink) 20%, var(--pj-card)));
+  }
+
+  .blog-search #blog-search {
+    width: 100%;
+    height: 44px;
+    min-width: 0;
+  }
+
+  .blog-search .blog-topic-filters button[aria-pressed="true"] {
+    background: color-mix(in srgb, var(--pj-ink) 13%, var(--pj-card));
+    color: var(--pj-ink);
+  }
+
+  .blog-search [data-blog-search-status] {
+    margin-top: .45rem;
+  }
+
+  @media (min-width: 42rem) {
+    .blog-search[data-blog-search-controls] {
+      grid-template-columns: minmax(0, max-content) 11.25rem;
+      column-gap: .75rem;
+    }
+
+    .blog-search > label {
+      grid-area: 1 / 2;
+    }
+
+    .blog-search > #blog-search {
+      grid-area: 2 / 2;
+    }
+  }
+
+  /* Visited article titles */
+  #blog-posts > li > h2 > a:visited {
+    color: color-mix(in srgb, var(--pj-link) 65%, #8b72ad);
+  }
+</style>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('#blog-search');
+  const controls = document.querySelector<HTMLElement>('[data-blog-search-controls]');
+  const status = controls?.querySelector<HTMLElement>('[data-blog-search-status]');
+  const reset = controls?.querySelector<HTMLButtonElement>('[data-blog-search-reset]');
+  const entries = Array.from(document.querySelectorAll<HTMLElement>(
+    '#blog-posts > [data-blog-searchable]'
+  ));
+
+  if (input && controls && status && reset) {
+    const postTopics = new Map(entries.map((entry) => [
+      entry, JSON.parse(entry.dataset.blogTopics ?? '[]') as string[],
+    ]));
+    const topics = [...new Set([...postTopics.values()].flat())];
+    const filters = document.createElement('div');
+    filters.className = 'blog-topic-filters';
+    filters.dataset.blogTopicFilters = '';
+    filters.setAttribute('role', 'group');
+    filters.setAttribute('aria-label', 'Filter posts by topic');
+
+    let activeTopic = '';
+    const buttons = new Map<string, HTMLButtonElement>();
+    const selectTopic = (topic: string) => {
+      activeTopic = topic;
+      for (const [label, button] of buttons) {
+        button.setAttribute('aria-pressed', String(label === topic));
+      }
+    };
+
+    for (const topic of ['', ...topics]) {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = topic || 'All posts';
+      buttons.set(topic, button);
+      filters.append(button);
+      button.addEventListener('click', () => {
+        selectTopic(topic);
+        update();
+      });
+    }
+    selectTopic('');
+
+    // Give dynamically created controls the same Astro style scope.
+    const scope = controls.getAttributeNames().find((name) => name.startsWith('data-astro-cid-'));
+    if (scope) {
+      filters.setAttribute(scope, '');
+      for (const button of buttons.values()) button.setAttribute(scope, '');
+    }
+    controls.prepend(filters);
+    reset.textContent = 'Clear search and filters';
+    const update = () => {
+      const words = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+      let visible = 0;
+      for (const entry of entries) {
+        const text = (entry.dataset.blogSearchable ?? '').toLowerCase();
+        const matchesTopic = !activeTopic || postTopics.get(entry)?.includes(activeTopic);
+        entry.hidden = !matchesTopic || !words.every((word) => text.includes(word));
+        if (!entry.hidden) visible++;
+      }
+      status.textContent = visible === 0
+        ? 'No matching posts'
+        : visible === 1 ? '1 post' : visible + ' posts';
+      reset.hidden = !words.length && !activeTopic;
+    };
+
+    input.addEventListener('input', update);
+    reset.addEventListener('click', () => {
+      input.value = '';
+      selectTopic('');
+      update();
+      input.focus();
+    });
+    controls.hidden = false;
+    update();
+  }
+</script>

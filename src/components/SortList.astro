@@ -1,0 +1,42 @@
+---
+interface Props {
+  listId: string;
+  defaultLabel: string;
+}
+
+const { listId, defaultLabel } = Astro.props;
+---
+
+<entry-sort data-list-id={listId} hidden>
+  <label>
+    Sort by
+    <select aria-controls={listId}>
+      <option value="default">{defaultLabel}</option>
+      <option value="title">Title A–Z</option>
+    </select>
+  </label>
+</entry-sort>
+
+<script>
+  class EntrySort extends HTMLElement {
+    connectedCallback() {
+      const list = document.getElementById(this.dataset.listId ?? '');
+      const select = this.querySelector('select');
+      if (!list || !select) return;
+
+      const entries = Array.from(list.querySelectorAll<HTMLElement>(':scope > [data-sort-title]'));
+      if (entries.length < 2) return;
+
+      select.value = 'default';
+      this.hidden = false;
+      select.addEventListener('change', () => {
+        const ordered = select.value === 'title'
+          ? [...entries].sort((a, b) => (a.dataset.sortTitle ?? '').localeCompare(b.dataset.sortTitle ?? '', 'en'))
+          : entries;
+        list.append(...ordered);
+      });
+    }
+  }
+
+  if (!customElements.get('entry-sort')) customElements.define('entry-sort', EntrySort);
+</script>

@@ -1,5 +1,5 @@
 ---
-const { label, inBlog = false } = Astro.props;
+const { label, inBlog = false, parent } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 const atHome = Astro.url.pathname.replace(/\/$/, '') === base;
 ---
@@ -9,6 +9,7 @@ const atHome = Astro.url.pathname.replace(/\/$/, '') === base;
     <ol>
       <li><a href={`${base}/`}>Home</a></li>
       {inBlog && <li><span aria-hidden="true">›</span><a href={`${base}/blog/`}>Blog</a></li>}
+      {parent && <li><span aria-hidden="true">›</span><a href={parent.href}>{parent.label}</a></li>}
       <li><span aria-hidden="true">›</span><span aria-current="page">{label}</span></li>
     </ol>
   </nav>

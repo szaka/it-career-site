@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Footer from '../components/Footer.astro';
 
-const { title, description } = Astro.props;
+const { title, description, parent } = Astro.props;
 ---
 
 <!doctype html>
@@ -14,8 +14,8 @@ const { title, description } = Astro.props;
   </head>
   <body>
     <Header />
-    <Breadcrumbs label={title.split(" | ")[0]} />
-    <main class="portfolio-page">
+    <Breadcrumbs label={title.split(" | ")[0]} {parent} />
+    <main id="main-content" class="portfolio-page" tabindex="-1">
       <slot />
     </main>
     <Footer />

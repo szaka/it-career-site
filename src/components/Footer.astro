@@ -1,76 +1,122 @@
 ---
+import AnalyticsConsent from './AnalyticsConsent.astro';
 import { SITE_TITLE } from '../consts';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const measurementId = 'G-PSX1XWCWD7';
-const analyticsEnabled = import.meta.env.PROD && /^G-[A-Z0-9]+$/.test(measurementId);
 ---
 
 <footer class="portfolio-footer">
   <span>© {new Date().getFullYear()} {SITE_TITLE}</span>
   <div class="portfolio-links">
     <a href={`${base}/privacy/`}>Privacy</a>
+    <a href={`${base}/rss.xml`}>RSS</a>
     <a href="https://github.com/szaka">GitHub</a>
+    <a href="https://www.linkedin.com/in/shahid-zaka/">LinkedIn</a>
+    <button type="button" data-footer-settings-toggle
+      aria-expanded="false" aria-controls="footer-settings">Settings</button>
   </div>
 
-  {analyticsEnabled && (
-    <div class="analytics-choice" data-measurement-id={measurementId}>
-      <button type="button" data-toggle>Analytics preferences</button>
-      <div data-options hidden>
-        <p>Allow Google Analytics to measure visits to this site?</p>
-        <button type="button" data-allow>Allow analytics</button>
-        <button type="button" data-decline>Decline analytics</button>
-      </div>
+  <div class="footer-settings" id="footer-settings" hidden>
+    <div class="footer-settings-controls">
+      <label class="site-appearance" hidden>
+        Appearance:
+        <select id="site-appearance">
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </label>
+      <AnalyticsConsent />
     </div>
-  )}
+  </div>
 </footer>
 
 <style>
-  .analytics-choice { width: 100%; }
-  .analytics-choice button { font: inherit; cursor: pointer; }
-  .analytics-choice p { margin-block: 0.5rem; }
 </style>
 
+
+
 <script>
-  const preference = document.querySelector<HTMLElement>('.analytics-choice');
-  const id = preference?.dataset.measurementId;
-  const options = preference?.querySelector<HTMLElement>('[data-options]');
-  const key = 'portfolio-analytics-choice';
+  const settingsToggle = document.querySelector<HTMLButtonElement>('[data-footer-settings-toggle]');
+  const settingsPanel = document.getElementById('footer-settings');
 
-  if (preference && options && id) {
-    const loadAnalytics = () => {
-      if (document.getElementById('portfolio-ga4')) return;
+  settingsToggle?.addEventListener('click', () => {
+    if (!settingsPanel) return;
+    settingsPanel.hidden = !settingsPanel.hidden;
+    settingsToggle.setAttribute('aria-expanded', String(!settingsPanel.hidden));
+  });
 
-      const analytics = window as Window & { dataLayer?: unknown[] };
-      analytics.dataLayer ??= [];
-      function gtag(..._args: unknown[]) {
-        analytics.dataLayer?.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', id, { allow_google_signals: false, allow_ad_personalization_signals: false });
-
-      const tag = document.createElement('script');
-      tag.id = 'portfolio-ga4';
-      tag.async = true;
-      tag.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(id)}`;
-      document.head.append(tag);
-    };
-
-    if (localStorage.getItem(key) === 'allow') loadAnalytics();
-
-    preference.querySelector('[data-toggle]')?.addEventListener('click', () => {
-      options.hidden = !options.hidden;
-    });
-    preference.querySelector('[data-allow]')?.addEventListener('click', () => {
-      localStorage.setItem(key, 'allow');
-      loadAnalytics();
-      options.hidden = true;
-    });
-    preference.querySelector('[data-decline]')?.addEventListener('click', () => {
-      const wasActive = localStorage.getItem(key) === 'allow';
-      localStorage.setItem(key, 'decline');
-      if (wasActive) location.reload();
-      else options.hidden = true;
+  const appearanceControl = document.querySelector<HTMLSelectElement>('#site-appearance');
+  if (appearanceControl) {
+    const root = document.documentElement;
+    appearanceControl.value = root.dataset.siteAppearance ?? 'system';
+    appearanceControl.closest('label')?.removeAttribute('hidden');
+    appearanceControl.addEventListener('change', () => {
+      const mode = appearanceControl.value;
+      if (mode === 'system') delete root.dataset.siteAppearance;
+      else root.dataset.siteAppearance = mode;
+      try { localStorage.setItem('portfolio-home-appearance', mode); } catch {}
     });
   }
 </script>
+
+<style>
+  [data-footer-settings-toggle] {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--pj-link, currentColor);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  [data-footer-settings-toggle]:hover,
+  [data-footer-settings-toggle][aria-expanded="true"] {
+    text-decoration: underline;
+    text-underline-offset: .16em;
+  }
+
+  .footer-settings[hidden] {
+    display: none;
+  }
+
+  .footer-settings {
+    flex-basis: 100%;
+    min-width: 0;
+    padding-block-start: .75rem;
+    border-top: 1px solid var(--pj-line);
+  }
+
+  .footer-settings-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: .5rem 1.25rem;
+  }
+
+  .footer-settings-controls :global(.analytics-settings) {
+    flex: 1 1 16rem;
+    min-width: 0;
+  }
+
+  .footer-settings-controls:has(:global(#analytics-notice:not([hidden])))
+    :global(.analytics-settings) {
+    flex-basis: 100%;
+  }
+
+  .footer-settings :global(button[data-preferences]) {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--pj-link, currentColor);
+    text-decoration: underline;
+    text-underline-offset: .16em;
+  }
+
+  [data-footer-settings-toggle]:focus-visible {
+    outline: 2px solid var(--pj-link, currentColor);
+    outline-offset: 3px;
+  }
+</style>

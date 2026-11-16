@@ -245,3 +245,110 @@ body:has(.portfolio-header) article pre {
     flex-basis: 100%;
   }
 }
+
+/* Blog topic labels */
+.portfolio-posts .post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.5rem;
+  list-style: none;
+  margin: 0.6rem 0 0;
+  padding: 0;
+}
+
+.post-tags li {
+  padding: 0.15rem 0.55rem;
+  border: 1px solid #d8d5cd;
+  border-radius: 0.3rem;
+  color: #4b504a;
+  font-size: 0.875rem;
+}
+
+
+/* Shared topic links and entry sorting */
+.entry-meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin: 0.35rem 0 0.85rem;
+  color: #4b504a;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.entry-meta .topic-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entry-meta time + .topic-links {
+  border-inline-start: 1px solid #d8d5cd;
+  padding-inline-start: 0.75rem;
+}
+
+.entry-meta .topic-links a {
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+entry-sort:not([hidden]) {
+  display: block;
+  margin-block: 1rem;
+  font-size: 0.875rem;
+}
+
+entry-sort select {
+  margin-inline-start: 0.4rem;
+  padding: 0.3rem 0.45rem;
+  font: inherit;
+}
+
+.topic-results {
+  padding-inline-start: 1.25rem;
+}
+
+.topic-results > li + li {
+  margin-top: 0.9rem;
+}
+
+
+/* Article metadata alignment */
+body:has(.portfolio-header) article .title .entry-meta {
+  justify-content: flex-start;
+  text-align: left;
+  margin-block: 0.75rem 0;
+}
+
+.entry-meta a:focus-visible {
+  outline: 2px solid #2d5045;
+  outline-offset: 3px;
+}
+
+
+/* Reading metadata */
+.entry-facts {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  white-space: nowrap;
+}
+
+.entry-facts time + span::before {
+  content: '·';
+  margin-inline-end: 0.4rem;
+}
+
+.entry-facts + .topic-links,
+.entry-meta > [data-reading-project]:not([hidden]) + .topic-links {
+  border-inline-start: 1px solid #d8d5cd;
+  padding-inline-start: 0.75rem;
+}

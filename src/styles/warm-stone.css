@@ -1,0 +1,279 @@
+:root {
+  color-scheme: light;
+  --pj-paper: #f8f8f7;
+  --pj-card: #ffffff;
+  --pj-ink: #252628;
+  --pj-muted: #50545a;
+  --pj-link: #414b58;
+  --pj-line: #d8dadd;
+  --pj-tint: #e2e5e9;
+}
+
+:root[data-site-appearance="dark"] {
+  color-scheme: dark;
+  --pj-paper: #1d1f21;
+  --pj-card: #272a2e;
+  --pj-ink: #e7e8ea;
+  --pj-muted: #bdc1c7;
+  --pj-link: #c4ccd6;
+  --pj-line: #484d54;
+  --pj-tint: #414953;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-site-appearance]) {
+    color-scheme: dark;
+  --pj-paper: #1d1f21;
+  --pj-card: #272a2e;
+  --pj-ink: #e7e8ea;
+  --pj-muted: #bdc1c7;
+  --pj-link: #c4ccd6;
+  --pj-line: #484d54;
+  --pj-tint: #414953;
+  }
+}
+
+body:has(.portfolio-header) {
+  background: var(--pj-paper);
+  color: var(--pj-ink);
+}
+
+body:has(.portfolio-header) :is(h1, h2, h3) {
+  color: var(--pj-ink);
+  font-weight: 400;
+}
+
+body:has(.portfolio-header) :is(header, main, footer, .breadcrumbs) a {
+  color: var(--pj-link);
+}
+
+body:has(.portfolio-header) :is(.portfolio-summary, .entry-meta, .portfolio-date, .ai-note, .breadcrumbs, footer, figcaption, article .date) {
+  color: var(--pj-muted);
+}
+
+body:has(.portfolio-header) :is(.portfolio-header nav, .portfolio-section, .portfolio-footer, .ai-note, article .title, hr) {
+  border-color: var(--pj-line);
+}
+
+body:has(.portfolio-header) :is(.primary-link, .code-with-copy, .code-copy-button) {
+  background: var(--pj-card);
+  border-color: var(--pj-line);
+  color: var(--pj-ink);
+}
+
+body:has(.portfolio-header) .code-with-copy pre code {
+  color: var(--pj-ink);
+}
+
+body:has(.portfolio-header) :not(pre) > code {
+  background: var(--pj-tint);
+  color: var(--pj-ink);
+}
+
+body:has(.portfolio-header) :focus-visible {
+  outline-color: var(--pj-link);
+}
+
+.site-appearance:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.site-appearance select {
+  min-height: 2.75rem;
+  padding-inline: .6rem;
+  border: 1px solid var(--pj-line);
+  border-radius: .35rem;
+  color: var(--pj-ink);
+  background: var(--pj-card);
+  font: inherit;
+}
+
+/* Warm Stone reading and page hierarchy */
+body:has(.portfolio-header) {
+  --reading-width: 46rem;
+  --reading-gutter: clamp(1rem, 4vw, 1.25rem);
+}
+
+/* Match the project detail page's title and reading column. */
+body:has(.portfolio-header) main:has(article .prose) {
+  box-sizing: border-box;
+  width: min(100%, var(--reading-width));
+  max-width: 100%;
+  margin-inline: auto;
+  padding: clamp(1.75rem, 5vw, 2.5rem) var(--reading-gutter) 3rem;
+}
+
+body:has(.portfolio-header) article :is(.prose, .title) {
+  width: 100%;
+  max-width: 100%;
+  padding-inline: 0;
+  color: var(--pj-ink);
+}
+
+body:has(.portfolio-header) article .title {
+  padding-block-start: 0;
+  border-color: var(--pj-line);
+}
+
+body:has(.portfolio-header) :is(.portfolio-page, article .title) h1 {
+  font: 400 clamp(2.35rem, 6vw, 3.35rem)/1.12 Georgia, serif;
+  color: var(--pj-ink);
+}
+
+body:has(.portfolio-header) article .prose :is(p, li, blockquote, dt, dd, th, td) {
+  color: var(--pj-ink);
+}
+
+body:has(.portfolio-header) article .prose :is(h2, h3) {
+  color: var(--pj-ink);
+  font-weight: 400;
+}
+
+body:has(.portfolio-header) article .prose h2 {
+  font-size: clamp(1.4rem, 4vw, 1.7rem);
+}
+
+body:has(.portfolio-header) article .prose h3 {
+  font-size: 1.15rem;
+}
+
+body:has(.portfolio-header) article .prose :is(figcaption, .ai-note p) {
+  color: var(--pj-muted);
+}
+
+body:has(.portfolio-header) article .prose .code-with-copy {
+  background: var(--pj-card);
+  border-color: var(--pj-line);
+}
+
+body:has(.portfolio-header) article .prose pre {
+  background: var(--pj-card) !important;
+  color: var(--pj-ink) !important;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+body:has(.portfolio-header) article .prose pre :is(code, span) {
+  background: transparent !important;
+  color: var(--pj-ink) !important;
+  white-space: inherit;
+  overflow-wrap: inherit;
+}
+
+body:has(.portfolio-header) article .prose :not(pre) > code {
+  background: var(--pj-tint);
+  color: var(--pj-ink);
+}
+
+body:has(.portfolio-header) article .prose img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Shared link appearance */
+body:has(.portfolio-header) a[href] {
+  text-decoration: none !important;
+}
+
+body:has(.portfolio-header) a[href]:hover {
+  background-color: var(--pj-tint);
+  border-radius: 0.15em;
+}
+
+body:has(.portfolio-header) a[href]:focus-visible {
+  outline: 2px solid var(--pj-link);
+  outline-offset: 3px;
+  border-radius: 0.15em;
+}
+
+body:has(.portfolio-header) .portfolio-header a:is(.active, [aria-current="page"]) {
+  font-weight: 700;
+}
+
+/* Compact theme control and inline links */
+.site-appearance:not([hidden]) {
+  gap: .3rem;
+  font-size: .8125rem;
+  white-space: nowrap;
+}
+
+.site-appearance select {
+  min-height: 44px;
+  padding-block: 0;
+  padding-inline: .35rem;
+  background: transparent;
+}
+
+/* Keep the underline on links that are part of a sentence. */
+body:has(.portfolio-header) main
+  p:not(.portfolio-links, .contact-actions, .entry-meta)
+  a[href]:not(.primary-link, .contact-primary),
+body:has(.portfolio-header) main
+  p.portfolio-intro a[href]:not(.primary-link, .contact-primary),
+body:has(.portfolio-header) article .prose
+  a[href]:not(.topic-links a) {
+  text-decoration: underline !important;
+  text-decoration-thickness: .06em;
+  text-underline-offset: .18em;
+}
+
+.code-copy-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Keyboard bypass for the shared navigation. */
+.skip-link {
+  position: absolute;
+  inset-block-start: .5rem;
+  inset-inline-start: .5rem;
+  z-index: 5;
+  padding: .65rem .9rem;
+  background: var(--pj-card);
+  color: var(--pj-link);
+  border: 2px solid currentColor;
+}
+
+.skip-link:not(:focus) {
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* AI disclosure box */
+body:has(.portfolio-header) .ai-disclosure {
+  margin-block: .85rem 1.25rem;
+  padding: .65rem .85rem;
+  border: 1px solid var(--pj-line);
+  border-radius: .35rem;
+  background: var(--pj-tint);
+  color: var(--pj-ink);
+  font-size: .9375rem;
+  line-height: 1.55;
+}
+
+body:has(.portfolio-header) .ai-disclosure p {
+  color: inherit;
+  margin: 0;
+}
+
+body:has(.portfolio-header) .ai-disclosure p + p {
+  margin-block-start: .65rem;
+}
+
+body:has(.portfolio-header) .ai-disclosure.ai-policy {
+  margin-block-start: 1.5rem;
+}
+
+body:has(.portfolio-header) .ai-disclosure h2 {
+  font-size: 1.2rem;
+  margin-block-end: .55rem;
+}

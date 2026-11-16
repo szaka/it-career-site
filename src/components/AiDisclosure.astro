@@ -1,0 +1,12 @@
+---
+interface Props {
+  text?: string;
+}
+const { text } = Astro.props;
+---
+
+{text && (
+  <aside class="ai-disclosure" aria-label="AI assistance">
+    <p><strong>AI assistance.</strong> {text}</p>
+  </aside>
+)}

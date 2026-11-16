@@ -1,0 +1,193 @@
+---
+import suffolkCountyMap from '../assets/suffolk-county-map.svg?url';
+import PortfolioPage from '../layouts/PortfolioPage.astro';
+
+---
+
+<PortfolioPage
+  title="Contact | Shahid Zaka"
+  description="Connect with Shahid Zaka about IT support roles, portfolio projects, and technical documentation."
+>
+  <h1>Contact</h1>
+  <p class="portfolio-intro">
+    I’m pursuing IT support and help desk roles. If you’re hiring or have a
+    question about a project, LinkedIn is the best way to reach me.
+  </p>
+
+  <p class="contact-actions">
+    <a class="contact-primary" href="https://www.linkedin.com/in/shahid-zaka/" data-contact-primary>
+      Connect on LinkedIn <span aria-hidden="true">→</span>
+    </a>
+  </p>
+
+  <section class="portfolio-section" aria-labelledby="contact-topics">
+    <h2 id="contact-topics">What to reach out about</h2>
+    <ul>
+      <li>IT support, help desk, or desktop support opportunities.</li>
+      <li>Questions about a lab, troubleshooting write-up, or project.</li>
+    </ul>
+    <p>If you’re reaching out about a role, a link to the posting or a short description is helpful.</p>
+  </section>
+
+  <section class="portfolio-section" aria-labelledby="contact-location">
+    <h2 id="contact-location">Location</h2>
+    <p>Suffolk County, New York</p>
+    <figure class="contact-location-map">
+      <img src={suffolkCountyMap} alt="Suffolk County highlighted on eastern Long Island"
+        width="640" height="226" loading="lazy" decoding="async" />
+      <figcaption>
+        Boundaries from the U.S. Census Bureau.{" "}
+        <a href="https://www.openstreetmap.org/#map=9/40.91/-72.76"
+          rel="noreferrer" referrerpolicy="no-referrer">View on OpenStreetMap</a>
+      </figcaption>
+    </figure>
+  </section>
+</PortfolioPage>
+
+<style>
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+  }
+
+  .contact-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: .6rem;
+    min-height: 2.75rem;
+    padding: .4rem .85rem;
+    border: 1px solid var(--pj-link);
+    border-radius: .35rem;
+    background: var(--pj-tint);
+    font-weight: 650;
+  }
+
+  .contact-primary:hover {
+    border-color: var(--pj-ink);
+  }
+</style>
+
+
+
+
+
+<style>
+  .contact-map { margin-block-start: .8rem; }
+  .contact-map [hidden] { display: none !important; }
+  .contact-map button {
+    min-height: 44px;
+    padding: .35rem .7rem;
+    border: 1px solid var(--pj-link);
+    border-radius: .35rem;
+    background: var(--pj-card);
+    color: var(--pj-link);
+    font: inherit;
+    cursor: pointer;
+  }
+  .contact-map button:hover { background: var(--pj-tint); }
+  #suffolk-map {
+    margin-block: .8rem;
+    border: 1px solid var(--pj-line);
+    border-radius: .5rem;
+    overflow: hidden;
+  }
+  #suffolk-map :global(iframe) {
+    display: block;
+    width: 100%;
+    height: clamp(15rem, 45vw, 23rem);
+    border: 0;
+  }
+</style>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('#show-suffolk-map');
+  const panel = document.getElementById('suffolk-map');
+
+  if (button && panel) {
+    button.hidden = false;
+    button.setAttribute('aria-expanded', 'false');
+    button.addEventListener('click', () => {
+      const opening = panel.hidden;
+      if (opening && !panel.firstElementChild) {
+        const frame = document.createElement('iframe');
+        frame.title = 'Regional map of Suffolk County, New York';
+        frame.referrerPolicy = 'no-referrer';
+        frame.src = 'https://www.openstreetmap.org/export/embed.html?bbox=-73.55%2C40.49%2C-71.72%2C41.35&layer=mapnik';
+        panel.append(frame);
+      }
+      panel.hidden = !opening;
+      button.setAttribute('aria-expanded', String(opening));
+      button.textContent = opening ? 'Hide Suffolk County map' : 'Show Suffolk County map';
+    });
+  }
+</script>
+
+<style>
+  /* Contact action hierarchy */
+  a[data-contact-primary],
+  button[data-contact-map] {
+    box-sizing: border-box;
+    min-height: 44px;
+    font: inherit;
+    font-size: .9375rem;
+    font-weight: 600;
+    color: var(--pj-link, currentColor);
+  }
+
+  a[data-contact-primary] {
+    display: inline-flex;
+    align-items: center;
+    padding: .45rem .8rem;
+    border: 1px solid var(--pj-line, currentColor);
+    border-radius: var(--control-radius, .35rem);
+    background: var(--pj-card);
+    text-decoration: none;
+  }
+
+  a[data-contact-primary]:hover {
+    border-color: currentColor;
+  }
+
+  button[data-contact-map] {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-decoration: underline;
+    text-underline-offset: .16em;
+    cursor: pointer;
+  }
+
+  :is(a[data-contact-primary], button[data-contact-map]):focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+</style>
+
+<style>
+  /* Contact map text control */
+  button[data-contact-map]:is(:link, :visited, :hover, :focus, :active, :enabled) {
+    appearance: none;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none;
+    padding-inline: 0;
+    min-height: 44px;
+    font-weight: 400;
+    text-decoration: underline;
+    text-underline-offset: .16em;
+  }
+
+  button[data-contact-map]:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+  }
+</style>
+
+<style>
+  /* Local Contact map */
+  .contact-location-map { margin: 1rem 0 0; }
+  .contact-location-map img { display: block; max-width: 100%; height: auto; }
+  .contact-location-map figcaption { margin-block-start: .5rem; font-size: .875rem; }
+</style>

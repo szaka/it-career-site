@@ -1,4 +1,5 @@
 ---
+import ResumeLink from '../components/ResumeLink.astro';
 import PortfolioPage from '../layouts/PortfolioPage.astro';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -8,81 +9,328 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   title="About | Shahid Zaka"
   description="Shahid Zaka’s hands-on experience with IT support, home networking, and technical documentation."
 >
-  <h1>About</h1>
-  <p class="portfolio-intro">
-    I’m Shahid Zaka, based in Suffolk County, New York. I’m pursuing IT support
-    and help desk roles, and I use this site to share my labs, projects, and
-    troubleshooting write-ups.
+  <h1 id="about-page-title">About</h1>
+  <div class="about-intro">
+    <p class="portfolio-intro">
+    I’m pursuing IT support and help desk roles in Suffolk County, New York.
+    I’ve set up home networks, Wi-Fi, servers, and shared storage, and taught
+    basic computer classes at a Brooklyn nonprofit.
   </p>
+  <p>
+    When I troubleshoot, I clarify the problem, test one change at a time,
+    and document how I checked the fix so someone else can follow my steps.
+  </p>
+    <div class="resume-action"><ResumeLink /></div>
+  </div>
 
-  <section class="portfolio-section">
-    <h2>Hands-on experience</h2>
-    <p>
-      I’ve set up and maintained home networks, configured Wi-Fi and
-      network-attached storage, and set up servers and websites for personal
-      projects. I’ve also taught basic computer classes at a nonprofit in
-      Brooklyn. Teaching beginners gave me practice explaining technical
-      steps in plain language and adjusting my explanation when someone got stuck.
-    </p>
+<section class="portfolio-section" id="certifications"
+    aria-labelledby="certification-progress-heading">
+    <h2 id="certification-progress-heading">Certification progress</h2>
+    <ul>
+      <li>CompTIA Tech+ — Studying</li>
+      <li>CompTIA A+, Network+ &amp; Security+ — Training in progress</li>
+      <li>Google IT Support Professional Certificate — Planned study</li>
+    </ul>
   </section>
 
-  <section class="portfolio-section">
-    <h2>How I troubleshoot</h2>
-    <p>
-      I start by clarifying what someone expected to happen and what they saw
-      instead. Then I check the simplest explanations first, make one change at
-      a time, and verify the result. My write-ups include the checks that
-      narrowed down the problem so someone else can follow the same process.
-    </p>
-  </section>
-
-  <section class="portfolio-section">
-    <h2>What I’m learning now</h2>
-    <p>
-      I’m studying for CompTIA Tech+ and building my portfolio through practical
-      projects. One of those projects is this site. I set up an Astro blog on
-      GitHub Pages and fixed a navigation issue that only appeared when the
-      site was published under a repository path.
-    </p>
+  <section class="portfolio-section about-site-notes" aria-labelledby="about-site-heading">
+    <h2 id="about-site-heading">About this site</h2>
+    <section class="portfolio-section" id="site-build" aria-labelledby="site-build-heading">
+      <p>
+        I use this portfolio to share what I’m learning in IT support.
+        The write-ups show what I checked, what changed, and how I verified
+        the result. I write in Markdown, preview with Astro, and publish
+        through GitHub Pages.
+      </p>
     <p class="portfolio-links">
-      <a href={`${base}/projects/`}>View projects</a>
-      <a href={`${base}/blog/`}>Read the blog</a>
-      <a href="https://github.com/szaka">Browse my GitHub</a>
+      <a href="https://github.com/szaka/it-career-site">View the site source</a>
+      <a href="../projects/astro-portfolio/">Read the deployment case study</a>
+    </p>
+
+    <details>
+      <summary>What helped me build this site</summary>
+      <p>These are the tools I used to build and publish this site and the official guides I turned to when I got stuck. They helped me understand how the site works, check my fixes, and share my IT support projects.</p>
+      <ul data-about-resources>
+        <li><strong>Site and writing.</strong>{" "}<a href="https://docs.astro.build/en/guides/markdown-content/">Astro and Markdown</a>,{" "}<a href="https://code.visualstudio.com/docs/languages/markdown">VS Code Markdown editing</a>,{" "}and{" "}<a href="https://pagescms.org/docs/quick-start/">Pages CMS</a>.
+        </li>
+        <li><strong>Build and deployment.</strong>{" "}<a href="https://git-scm.com/docs">Git</a>,{" "}<a href="https://docs.npmjs.com/cli/commands/npm-ci">npm dependency installation</a>,{" "}<a href="https://docs.astro.build/en/guides/deploy/github/">Astro deployment with GitHub Actions and Pages</a>,{" "}and{" "}<a href="https://www.namecheap.com/support/knowledgebase/article.aspx/434/2237/how-do-i-set-up-host-records-for-a-domain/">Namecheap DNS</a>.
+        </li>
+        <li><strong>Design and checks.</strong>{" "}<a href="https://brailleinstitute.org/freefont">Atkinson Hyperlegible</a>{" "}for the local font files,
+          <a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a>{" "}as an accessibility
+          reference, and{" "}<a href="https://playwright.dev/docs/accessibility-testing">Playwright and axe</a>{" "}for automated browser checks.
+        </li>
+        <li><strong>AI and visitor-facing services.</strong>{" "}<a href="#ai-use">How I use ChatGPT</a>{" "}and{" "}<a href="../privacy/">how the site handles hosting, optional analytics, and maps</a>.
+        </li>
+      </ul>
+    </details>
+  </section>
+  </section>
+
+  <section class="portfolio-section" aria-labelledby="accessibility-heading">
+    <h2 id="accessibility-heading">Accessibility</h2>
+    <p>
+      I check this site at narrow and wide screen sizes in both light and dark
+      modes. If you have trouble reading a page or using a control, please
+      let me know through the <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/contact/`}>Contact page</a>. If you can, include the page and what you were trying to do.
     </p>
   </section>
 
-  {import.meta.env.DEV && (
-    <section class="portfolio-section" id="certifications">
-      <h2>Certifications</h2>
-      <p><strong>Layout preview.</strong> The examples below are unearned.</p>
-      <ul>
-        <li><strong>CompTIA Tech+</strong> · CompTIA · Sample credential</li>
-        <li><strong>CompTIA A+</strong> · CompTIA · Sample credential</li>
-      </ul>
-    </section>
-  )}
-
-  <section class="portfolio-section ai-policy" id="ai-use" aria-labelledby="ai-use-heading">
+  <aside class="ai-disclosure ai-policy" id="ai-use" aria-labelledby="ai-use-heading">
     <h2 id="ai-use-heading">How I use AI</h2>
-    <p>I use tools like ChatGPT to explore explanations, suggest checks when I’m
-      troubleshooting, and draft code or documentation I can review.</p>
-
-    <h3>What I verify myself</h3>
-    <p>Before publishing a result, I check it against something I can inspect,
-      such as official documentation, a build, terminal output, or the behavior
-      of the deployed site. In my write-ups, I separate the checks I actually
-      ran from steps I’m suggesting someone try.</p>
-
-    <h3>What I disclose</h3>
-    <p>When AI materially helps with code, troubleshooting, analysis, or drafting,
-      I add an <strong>AI assistance</strong> note to the post or project. It
-      explains what the tool contributed and what I checked myself. Routine
-      spelling and formatting corrections don’t need a separate note.</p>
-
-    <h3>How to read the notes</h3>
-    <p><strong>AI use: None</strong> means I’ve explicitly confirmed that I did
-      the work and wrote the entry without AI assistance. I use that label
-      when documenting independent work matters. An entry without a note makes
-      no claim about AI use.</p>
-  </section>
+    <p>
+      I use AI to explore explanations, suggest troubleshooting checks, and
+      draft code or documentation. Before I publish a result, I verify it
+      against documentation, test output, or the behavior I observed. In a
+      write-up, I identify the checks I ran and any follow-up steps I suggest.
+    </p>
+    <p>
+      I add an <strong>AI assistance</strong> note when AI meaningfully
+      contributes to the work or write-up. The note says what it helped with
+      and what I verified. Routine spelling and formatting edits don’t require
+      a note.
+    </p>
+    <p>
+      <strong>AI use: None</strong> means I completed the work and wrote the
+      entry without AI assistance. An entry without a note makes no claim
+      about AI use.
+    </p>
+  </aside>
 </PortfolioPage>
+
+<style>
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .75rem;
+    margin-block-start: .85rem;
+  }
+
+  .skill-card {
+    min-width: 0;
+    padding: .85rem 1rem;
+    border: 1px solid var(--pj-line);
+    border-radius: .45rem;
+    background: var(--pj-card);
+  }
+
+  .skill-card h3 { margin: 0 0 .35rem; }
+  .skill-card ul {
+    margin: 0;
+    padding-inline-start: 1.15rem;
+    color: var(--pj-muted);
+    font-size: .9375rem;
+  }
+
+  @media (max-width: 36rem) {
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+
+<style>
+  .about-intro {
+    max-width: 61ch;
+  }
+
+  .about-intro > p {
+    text-wrap: pretty;
+  }
+
+  .about-intro .about-resume {
+    margin-block: .9rem 0;
+    font-size: .9375rem;
+  }
+
+  .about-resume:empty {
+    display: none;
+  }
+
+  .certification-progress {
+    margin-block: 1rem 1.75rem;
+    padding: .85rem 1rem;
+    border: 1px solid var(--pj-line);
+    border-radius: .45rem;
+    background: var(--pj-card);
+  }
+
+  .certification-progress h2 {
+    font-size: 1.2rem;
+    margin-block: 0 .35rem;
+  }
+
+  .certification-progress ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .certification-progress li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: .25rem .85rem;
+    padding-block: .55rem;
+    font-size: .9375rem;
+  }
+
+  .certification-progress li + li {
+    border-top: 1px solid var(--pj-line);
+  }
+
+  .certification-status {
+    background: var(--pj-tint);
+    color: var(--pj-ink);
+    border-radius: .25rem;
+    padding: .1rem .45rem;
+    font-size: .8125rem;
+  }
+</style>
+
+<style>
+  /* About resource list spacing */
+  [data-about-resources] > li + li {
+    margin-block-start: 0.65rem;
+  }
+</style>
+
+<style is:global>
+  /* About page hierarchy */
+  .about-site-notes > section {
+    margin: 1rem 0 0;
+    padding: 0;
+    border: 0;
+  }
+
+  .about-site-notes h3 {
+    margin-block: 0 .4rem;
+    font-size: 1.15rem;
+  }
+
+  /* Flatten the skill cards and certification panel around their headings. */
+  [data-about-skills] + * > *,
+  :is(section, div):has(> [data-about-certifications]),
+  :is(aside, section)#ai-use {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding-inline: 0;
+  }
+
+  [data-about-skills] + * {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .85rem 1.5rem;
+  }
+
+  @media (max-width: 36rem) {
+    [data-about-skills] + * {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  :is(section, div):has(> [data-about-certifications])
+    :is(li, p) > :last-child:not(a) {
+    background: transparent;
+    border: 0;
+    padding-inline: 0;
+  }
+
+  :is(aside, section)#ai-use {
+    border-block-start: 1px solid var(--pj-line);
+  }
+</style>
+
+
+<style is:global>
+  /* About reading layout */
+  main:has(#about-page-title) {
+    --about-reading-width: 65ch;
+  }
+
+  main:has(#about-page-title) :is(.portfolio-intro, p) {
+    max-inline-size: var(--about-reading-width);
+  }
+
+  main:has(#about-page-title) .portfolio-section {
+    margin-block-start: 1.75rem;
+    padding-block-start: 1.25rem;
+  }
+
+  main:has(#about-page-title) [data-about-skills] + * {
+    gap: 1rem 1.5rem;
+    margin-block: .75rem 1rem;
+  }
+
+  main:has(#about-page-title) [data-about-skills] + * > * {
+    margin: 0;
+    padding: 0;
+  }
+
+  main:has(#about-page-title) [data-about-skills] + * :is(h3, h4) {
+    margin: 0 0 .25rem;
+    font-size: 1rem;
+  }
+
+  main:has(#about-page-title) [data-about-skills] + * ul {
+    margin: 0;
+    padding-inline-start: 1.2em;
+  }
+
+  main:has(#about-page-title) .about-site-notes > section {
+    margin-block-start: .85rem;
+    padding: 0;
+  }
+
+  main:has(#about-page-title) .about-site-notes > section > p {
+    margin-block: .35rem .65rem;
+  }
+
+  main:has(#about-page-title) #ai-use {
+    background: transparent;
+    box-shadow: none;
+    padding-inline: 0;
+  }
+</style>
+
+
+<style is:global>
+  /* About print layout */
+  @media print {
+    body:has(#about-page-title) :is(.portfolio-header, .portfolio-footer, .breadcrumbs) {
+      display: none;
+    }
+
+    main:has(#about-page-title) {
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      background: white;
+      color: black;
+      font-size: 11pt;
+    }
+
+    main:has(#about-page-title) :is(h1, h2, h3, p, li, a) {
+      color: black;
+    }
+
+    main:has(#about-page-title) :is(h1, h2, h3, summary) {
+      break-after: avoid;
+    }
+
+    main:has(#about-page-title) :is(p, li) {
+      orphans: 2;
+      widows: 2;
+    }
+
+    main:has(#about-page-title) :is(.portfolio-section, #ai-use) {
+      margin-block: 1rem 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+  }
+</style>

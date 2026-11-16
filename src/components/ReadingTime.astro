@@ -1,0 +1,35 @@
+---
+interface Props {
+  body?: string;
+  projectId?: string;
+}
+
+const { body = '', projectId } = Astro.props;
+const prose = body
+  .replace(/^[ \t]*(`{3,}|~{3,})[^\n]*\n[\s\S]*?^[ \t]*\1[ \t]*$/gm, '')
+  .replace(/<aside\b[^>]*>[\s\S]*?<\/aside>/gi, '')
+  .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
+  .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+  .replace(/<[^>]+>/g, '');
+const words = prose.match(/\b[\p{L}\p{N}]+(?:[’'-][\p{L}\p{N}]+)*/gu)?.length ?? 0;
+const minutes = Math.max(1, Math.ceil(words / 225));
+---
+
+{projectId
+  ? <span data-reading-project={projectId} hidden></span>
+  : <span>{minutes} min read</span>}
+
+<script>
+  for (const badge of document.querySelectorAll<HTMLElement>('[data-reading-project]')) {
+    const section = document.getElementById(badge.dataset.readingProject ?? '');
+    if (!section) continue;
+
+    const text = Array.from(section.querySelectorAll(':scope > p'))
+      .filter((paragraph) => !paragraph.querySelector('a'))
+      .map((paragraph) => paragraph.textContent ?? '')
+      .join(' ');
+    const words = text.match(/\b[\p{L}\p{N}]+(?:[’'-][\p{L}\p{N}]+)*/gu)?.length ?? 0;
+    badge.textContent = `${Math.max(1, Math.ceil(words / 225))} min read`;
+    badge.hidden = false;
+  }
+</script>

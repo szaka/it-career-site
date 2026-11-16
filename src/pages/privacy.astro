@@ -1,21 +1,40 @@
 ---
 import PortfolioPage from '../layouts/PortfolioPage.astro';
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<PortfolioPage title="Privacy | Shahid Zaka" description="Privacy information for this portfolio and blog.">
+<PortfolioPage title="Privacy | Shahid Zaka" description="How this portfolio handles hosting, analytics, and browser preferences.">
   <h1>Privacy</h1>
-  <p>This personal portfolio and blog has no visitor accounts, comments, or contact forms.</p>
+  <p class="portfolio-intro">This portfolio has no visitor accounts, comments, or contact forms. Google Analytics is optional and starts only after you allow it on the live site.</p>
 
   <section class="portfolio-section">
-    <h2>Hosting</h2>
-    <p>GitHub Pages hosts this site. GitHub logs visitors’ IP addresses for security.
-      <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub Privacy Statement</a></p>
+    <h2>When you visit</h2>
+    <p><strong>GitHub Pages</strong> hosts the site and logs visitors’ IP addresses for security. It serves the pages, styles, and font files. The Atkinson fonts are bundled with the site. Your browser downloads them from the site host.</p>
+    <p><a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">Read GitHub’s privacy statement</a></p>
   </section>
 
   <section class="portfolio-section">
-    <h2>Optional analytics</h2>
-    <p>If you allow analytics, Google Analytics measures visits and page views. It may use cookies to distinguish visits. This site stores your analytics preference in your browser.</p>
-    <p>You can change your choice under <strong>Analytics preferences</strong> in the footer when analytics is available. Declining stops future measurement from this site in that browser. You can clear existing analytics cookies through your browser settings.</p>
-    <p><a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites that use its services</a></p>
+    <h2>If you allow analytics</h2>
+    <p><strong>Google Analytics</strong> helps me see which pages readers visit. It can receive page URLs, referrer information, visit events, approximate location, and browser or device information. It can use cookies to distinguish visits. If you reject analytics or leave the notice unanswered, the site keeps the Analytics tag unloaded.</p>
+    <p>Use <a href="#footer-settings" data-open-analytics>Manage analytics preferences</a> to change your choice. Rejecting after allowing stops future collection from this browser and removes the site’s accessible Analytics cookies. You can also clear site data in your browser. Withdrawing consent applies to future collection.</p>
+    <p><a href="https://policies.google.com/technologies/partner-sites">See how Google uses data from sites that use its services</a></p>
+  </section>
+
+  <section class="portfolio-section">
+    <h2>What your browser remembers</h2>
+    <p>The site can save your theme preference and your analytics choice in local browser storage. Your theme choice works independently of analytics.</p>
+  </section>
+
+  <section class="portfolio-section">
+    <h2>AI tools, maps, and external links</h2>
+    <p>The Contact map is served by this site. Opening the optional OpenStreetMap link takes you to a separate website.</p>
+    <p>I use ChatGPT in my authoring workflow and Pages CMS to edit content. This public site has no chatbot or Pages CMS embed and does not send visitor activity to those tools.</p>
+    <p>When you follow an external link, such as LinkedIn, GitHub, or OpenStreetMap, the destination handles your visit under its own privacy practices.</p>
+  </section>
+
+  <section class="portfolio-section">
+    <h2>Questions</h2>
+    <p><a href={base + '/contact/'}>Contact me about privacy</a>.</p>
   </section>
 </PortfolioPage>

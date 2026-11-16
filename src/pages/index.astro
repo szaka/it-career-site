@@ -1,38 +1,139 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection as getSelectedWorkCollection } from 'astro:content';
+import SelectedWorkDate from '../components/FormattedDate.astro';
+import SelectedWorkReadingTime from '../components/ReadingTime.astro';
+import {
+  projectReadingBody as selectedWorkProjectBody,
+  projectTopics as selectedWorkProjects,
+} from '../data/topics';
+
+const selectedWorkProject = selectedWorkProjects.find(
+  (project) => project.id === 'astro-portfolio'
+);
+const selectedWorkArticle = (await getSelectedWorkCollection('blog')).find(
+  (post) => post.id === 'syncing-pages-cms-with-astro'
+);
+if (!selectedWorkProject || !selectedWorkArticle) {
+  throw new Error('Could not find the project or article featured on Home.');
+}
+
+import ResumeLink from '../components/ResumeLink.astro';
 import PortfolioPage from '../layouts/PortfolioPage.astro';
 import { SITE_TITLE } from '../consts';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-const posts = (await getCollection('blog'))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || a.data.title.localeCompare(b.data.title))
-  .slice(0, 2);
 ---
 
-<PortfolioPage title={SITE_TITLE} description="IT support labs, projects, and troubleshooting notes by Shahid Zaka.">
+<PortfolioPage title={SITE_TITLE} description="IT support projects and troubleshooting write-ups by Shahid Zaka.">
   <h1>{SITE_TITLE}</h1>
-  <p class="portfolio-intro">I’m building my IT support portfolio through hands-on labs and projects. I document what I tried, how I diagnosed problems, and how I verified the result.</p>
-  <p class="portfolio-links">
-    <a href={`${base}/projects/`}>View projects</a>
-    <a href={`${base}/blog/`}>Read the blog</a>
-    <a href="https://github.com/szaka">GitHub</a>
+  <p class="portfolio-intro">
+    I’m pursuing IT support and help desk roles in Suffolk County, New York.
+    I’ve set up home networks and shared storage, and taught basic computer
+    classes at a Brooklyn nonprofit. In the work below, I show how I narrow
+    down a problem and check that the fix works.
   </p>
+  <div class="home-resume-action resume-action">
+    <ResumeLink />
+  </div>
 
-  <section class="portfolio-section">
-    <h2>Featured project</h2>
-    <h3><a href={`${base}/projects/#astro-portfolio`}>Deploying the Astro portfolio</a></h3>
-    <p class="portfolio-summary">I set up automated publishing with GitHub Actions and fixed a blog link that broke under the GitHub Pages project path.</p>
+  <section data-selected-work class="portfolio-section" aria-labelledby="selected-work">
+    <h2 id="selected-work">Selected work</h2>
+
+    <div class="home-post">
+      <h3><a href={`${base}/projects/astro-portfolio/`}>Deploying the Astro portfolio</a></h3>
+    <div class="entry-meta" data-selected-work-meta>
+      <span class="entry-facts">
+      {selectedWorkProject.verifiedDate && (
+        <><SelectedWorkDate date={new Date(selectedWorkProject.verifiedDate + 'T00:00:00Z')} /><span class="selected-work-separator">{" · "}</span></>
+      )}
+      <SelectedWorkReadingTime body={selectedWorkProjectBody(selectedWorkProject)} />
+      </span>
+    </div>
+      <p class="portfolio-summary">
+        I automated publishing with GitHub Actions and checked that links worked on the deployed site.
+      </p>
+    </div>
+
+    <div class="home-post">
+      <h3><a href={`${base}/blog/syncing-pages-cms-with-astro/`}>Why my Pages CMS edit didn’t show up in Astro</a></h3>
+    <div class="entry-meta" data-selected-work-meta>
+      <span class="entry-facts">
+      <SelectedWorkDate date={selectedWorkArticle.data.pubDate} /><span class="selected-work-separator">{" · "}</span>
+      <SelectedWorkReadingTime body={selectedWorkArticle.body} />
+      </span>
+    </div>
+      <p class="portfolio-summary">
+        I traced the stale preview to a mismatch between GitHub and the files Astro was serving on my Mac.
+      </p>
+    </div>
+    <p class="selected-work-links"><a href={`${base}/projects/`}>Browse projects</a><a href={`${base}/blog/`}>Read the blog</a></p>
   </section>
-
-  {posts.length > 0 && (
-    <section class="portfolio-section">
-      <h2>Latest writing</h2>
-      {posts.map((post) => (
-        <div class="home-post">
-          <h3><a href={`${base}/blog/${post.id}/`}>{post.data.title}</a></h3>
-          <p class="portfolio-summary">{post.data.description}</p>
-        </div>
-      ))}
-    </section>
-  )}
 </PortfolioPage>
+
+<style>
+  .primary-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 0.85rem;
+    border: 1px solid currentColor;
+    border-radius: 0.3rem;
+    font-weight: 700;
+  }
+</style>
+
+<style is:global>
+  [data-selected-work] h2 {
+    margin-block-end: 1rem;
+  }
+
+  [data-selected-work] h3 {
+    margin-block: 0 .3rem;
+    font-family: inherit;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  [data-selected-work] h3 a {
+    text-decoration: underline;
+    text-underline-offset: .16em;
+  }
+
+  [data-selected-work] h3 + p {
+    margin-block: 0 1.25rem;
+    max-inline-size: 65ch;
+  }
+
+  [data-selected-work] .selected-work-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem 1.25rem;
+    margin-block: 1rem 0;
+    font-size: .9375rem;
+  }
+
+  [data-selected-work] .selected-work-links a {
+    text-decoration: underline;
+    text-underline-offset: .16em;
+  }
+</style>
+
+<style is:global>
+  [data-selected-work-meta] {
+    margin-block: .15rem .45rem;
+    color: var(--pj-muted);
+    font-size: .875rem;
+  }
+
+  [data-selected-work-meta] + p {
+    margin-block: 0 1.25rem;
+    max-inline-size: 65ch;
+  }
+</style>
+
+<style is:global>
+  [data-selected-work-meta] .entry-facts time + .selected-work-separator::before {
+    content: none;
+  }
+</style>
