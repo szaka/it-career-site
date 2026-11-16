@@ -4,15 +4,32 @@ import PortfolioPage from '../layouts/PortfolioPage.astro';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<PortfolioPage title="Projects | Shahid Zaka" description="Selected hands-on IT projects by Shahid Zaka.">
+<PortfolioPage title="Projects | Shahid Zaka" description="Hands-on projects in static-site deployment and content publishing.">
   <h1>Projects</h1>
+  <p class="portfolio-intro">Each project documents what I built, the problem I worked through, and how I checked the result.</p>
+
   <section class="portfolio-section" id="astro-portfolio">
-    <h2>Building and deploying this site</h2>
-    <p>I set up a static Astro site, connected it to GitHub Pages, and configured GitHub Actions to build and deploy it from the main branch.</p>
-    <p>During testing, I fixed navigation and post links so they worked under the repository path. I verified the fix by opening a post from the deployed blog listing.</p>
+    <h2><a href={`${base}/blog/setting-up-my-astro-blog/`}>Deploying the Astro portfolio</a></h2>
+    <p>I set up this Astro site and created a GitHub Actions workflow to build and publish it from the <code>main</code> branch.</p>
+    <p><strong>What I fixed.</strong> The blog listing linked to the domain root. On GitHub Pages, this site was served under <code>/it-career-site/</code>, so the post link led outside the site.</p>
+    <p><strong>How I verified it.</strong> I checked the generated HTML after rebuilding, then opened the article from the deployed blog listing.</p>
     <p class="portfolio-links">
-      <a href={`${base}/blog/setting-up-my-astro-blog/`}>Read the write-up</a>
-      <a href="https://github.com/szaka/it-career-site">View on GitHub</a>
+      <a href={`${base}/blog/setting-up-my-astro-blog/`}>Read the link troubleshooting case study</a>
+      <a href="https://github.com/szaka/it-career-site/commit/1096d83">View the fix on GitHub</a>
     </p>
+    <aside class="ai-note" aria-label="AI assistance">
+      <p><strong>AI assistance.</strong> I used ChatGPT to draft the theme code and suggest the base-path fix. I applied the changes, built the site, and tested the deployed link.</p>
+    </aside>
+  </section>
+
+  <section class="portfolio-section" id="browser-editing">
+    <h2><a href={`${base}/blog/syncing-pages-cms-with-astro/`}>Setting up browser-based editing</a></h2>
+    <p>I configured Pages CMS to edit Astro Markdown posts through a browser. I set up separate title, description, date, and body fields.</p>
+    <p><strong>What I learned.</strong> An edit saved in the CMS went to GitHub first. My local Astro preview showed the previous version until I pulled the commit into the folder the dev server was using.</p>
+    <p><strong>How I verified it.</strong> I pulled the updated post, refreshed the local preview, and checked that my edit appeared.</p>
+    <p><a href={`${base}/blog/syncing-pages-cms-with-astro/`}>Read the Pages CMS sync walkthrough</a></p>
+    <aside class="ai-note" aria-label="AI assistance">
+      <p><strong>AI assistance.</strong> I used ChatGPT to draft the CMS configuration and help diagnose the stale preview. I saved the edit and verified it locally after pulling.</p>
+    </aside>
   </section>
 </PortfolioPage>

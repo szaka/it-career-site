@@ -1,0 +1,39 @@
+---
+const { label, inBlog = false } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const atHome = Astro.url.pathname.replace(/\/$/, '') === base;
+---
+
+{!atHome && (
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      <li><a href={`${base}/`}>Home</a></li>
+      {inBlog && <li><span aria-hidden="true">›</span><a href={`${base}/blog/`}>Blog</a></li>}
+      <li><span aria-hidden="true">›</span><span aria-current="page">{label}</span></li>
+    </ol>
+  </nav>
+)}
+
+<style>
+  .breadcrumbs {
+    box-sizing: border-box;
+    width: min(100%, 46rem);
+    margin-inline: auto;
+    padding: 0.75rem 1.25rem 0;
+    color: #4b504a;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  ol, li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.6rem;
+    margin: 0;
+    padding: 0;
+  }
+
+  ol { list-style: none; }
+  a { color: #2d5045; text-underline-offset: 0.2em; }
+  a:focus-visible { outline: 2px solid #2d5045; outline-offset: 3px; }
+</style>

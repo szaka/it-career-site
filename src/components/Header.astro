@@ -2,6 +2,7 @@
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
 import '../styles/portfolio.css';
+import '../styles/article-reading.css';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
@@ -16,3 +17,31 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     </div>
   </nav>
 </header>
+
+<script>
+  if (navigator.clipboard?.writeText) {
+    for (const code of document.querySelectorAll('main pre > code')) {
+      const pre = code.parentElement;
+      if (!pre || pre.parentElement?.classList.contains('code-with-copy')) continue;
+
+      const group = document.createElement('div');
+      group.className = 'code-with-copy';
+      pre.before(group);
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'code-copy-button';
+      button.textContent = 'Copy code';
+      button.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(code.textContent?.trimEnd() ?? '');
+          button.textContent = 'Copied';
+        } catch {
+          button.textContent = 'Select code to copy';
+        }
+      });
+
+      group.append(button, pre);
+    }
+  }
+</script>

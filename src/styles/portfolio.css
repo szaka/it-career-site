@@ -98,3 +98,150 @@ body:has(.portfolio-header) article pre {
   max-width: 100%;
   overflow-x: auto;
 }
+
+.ai-note {
+  margin-block: 2rem 0;
+  padding-block-start: 0.75rem;
+  border-top: 1px solid #d8d5cd;
+  color: #4b504a;
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.ai-note p { margin: 0; }
+
+.code-with-copy {
+  min-width: 0;
+  max-width: 100%;
+  margin-block: 1rem;
+}
+
+.code-with-copy pre {
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.code-copy-button {
+  display: block;
+  margin: 0 0 0.4rem auto;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid #77857e;
+  border-radius: 0.25rem;
+  color: #2d5045;
+  background: #faf9f6;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.code-copy-button:focus-visible {
+  outline: 2px solid #2d5045;
+  outline-offset: 2px;
+}
+
+
+/* Portfolio page readability */
+.portfolio-page {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+}
+
+.portfolio-page h1 {
+  font-size: clamp(2.25rem, 6vw, 3.25rem);
+  line-height: 1.12;
+}
+
+.portfolio-page h2 {
+  font-size: clamp(1.4rem, 4vw, 1.65rem);
+  line-height: 1.25;
+  margin: 0 0 0.75rem;
+}
+
+.portfolio-page h3 {
+  font-size: 1.125rem;
+  line-height: 1.4;
+  margin: 0 0 0.35rem;
+}
+
+.portfolio-page p {
+  max-width: 65ch;
+  margin-block: 0 0.85rem;
+}
+
+.portfolio-page .portfolio-intro {
+  max-width: 58ch;
+  font-size: 1.125rem;
+}
+
+.portfolio-page .portfolio-summary {
+  color: #4b504a;
+  font-size: 1rem;
+}
+
+.home-post + .home-post {
+  margin-top: 1.15rem;
+}
+
+.portfolio-page .ai-policy h3 {
+  margin-top: 1.1rem;
+  font-family: inherit;
+}
+
+.portfolio-page .ai-note p {
+  margin: 0;
+}
+
+.portfolio-header a:focus-visible,
+.portfolio-page a:focus-visible,
+.portfolio-footer a:focus-visible {
+  outline: 2px solid #2d5045;
+  outline-offset: 3px;
+}
+
+/* Header typography and spacing */
+.portfolio-header nav {
+  min-height: 4rem;
+  align-items: center;
+  gap: 0.5rem 1.5rem;
+  padding-block: 0.75rem;
+}
+
+.portfolio-header .site-name {
+  font-size: 1.375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.portfolio-header .portfolio-links {
+  align-items: center;
+  gap: 0.25rem 1.25rem;
+}
+
+.portfolio-header .portfolio-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none;
+}
+
+.portfolio-header a:hover,
+.portfolio-header a.active,
+.portfolio-header a[aria-current='page'] {
+  text-decoration: underline;
+}
+
+@media (max-width: 30rem) {
+  .portfolio-header nav {
+    justify-content: flex-start;
+    row-gap: 0.25rem;
+  }
+
+  .portfolio-header .portfolio-links {
+    flex-basis: 100%;
+  }
+}

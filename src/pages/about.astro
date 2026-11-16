@@ -50,4 +50,39 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       <a href="https://github.com/szaka">Browse my GitHub</a>
     </p>
   </section>
+
+  {import.meta.env.DEV && (
+    <section class="portfolio-section" id="certifications">
+      <h2>Certifications</h2>
+      <p><strong>Layout preview.</strong> The examples below are unearned.</p>
+      <ul>
+        <li><strong>CompTIA Tech+</strong> · CompTIA · Sample credential</li>
+        <li><strong>CompTIA A+</strong> · CompTIA · Sample credential</li>
+      </ul>
+    </section>
+  )}
+
+  <section class="portfolio-section ai-policy" id="ai-use" aria-labelledby="ai-use-heading">
+    <h2 id="ai-use-heading">How I use AI</h2>
+    <p>I use tools like ChatGPT to explore explanations, suggest checks when I’m
+      troubleshooting, and draft code or documentation I can review.</p>
+
+    <h3>What I verify myself</h3>
+    <p>Before publishing a result, I check it against something I can inspect,
+      such as official documentation, a build, terminal output, or the behavior
+      of the deployed site. In my write-ups, I separate the checks I actually
+      ran from steps I’m suggesting someone try.</p>
+
+    <h3>What I disclose</h3>
+    <p>When AI materially helps with code, troubleshooting, analysis, or drafting,
+      I add an <strong>AI assistance</strong> note to the post or project. It
+      explains what the tool contributed and what I checked myself. Routine
+      spelling and formatting corrections don’t need a separate note.</p>
+
+    <h3>How to read the notes</h3>
+    <p><strong>AI use: None</strong> means I’ve explicitly confirmed that I did
+      the work and wrote the entry without AI assistance. I use that label
+      when documenting independent work matters. An entry without a note makes
+      no claim about AI use.</p>
+  </section>
 </PortfolioPage>
