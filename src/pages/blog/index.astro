@@ -14,6 +14,7 @@ const starterPosts = new Set([
 const posts = (await getCollection('blog'))
   .filter((post) => !starterPosts.has(post.id))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf() || a.data.title.localeCompare(b.data.title));
+const topics = [...new Set(posts.flatMap((post) => post.data.tags ?? []))];
 ---
 
 <PortfolioPage title="Blog | Shahid Zaka" description="IT support labs, troubleshooting notes, and project write-ups.">
@@ -24,6 +25,14 @@ const posts = (await getCollection('blog'))
       Search posts
       <input type="search" id="blog-search" placeholder="Title, summary, or topic" />
     </label>
+    <div class="blog-topic-filters">
+      <label class="listing-topic-selector">Topic
+        <select data-blog-topic aria-controls="blog-posts">
+          <option value="">All topics</option>
+          {topics.map((topic) => <option value={topic}>{topic}</option>)}
+        </select>
+      </label>
+    </div>
       <SortList listId="blog-posts" defaultLabel="Newest first" />
     <p data-blog-search-status role="status"></p>
     <button type="button" data-blog-search-reset hidden>Clear search</button>
@@ -174,62 +183,29 @@ const posts = (await getCollection('blog'))
     const postTopics = new Map(entries.map((entry) => [
       entry, JSON.parse(entry.dataset.blogTopics ?? '[]') as string[],
     ]));
-    const topics = [...new Set([...postTopics.values()].flat())];
-    const filters = document.createElement('div');
-    filters.className = 'blog-topic-filters';
-    filters.dataset.blogTopicFilters = '';
-    filters.setAttribute('role', 'group');
-    filters.setAttribute('aria-label', 'Filter posts by topic');
-
-    let activeTopic = '';
-    const buttons = new Map<string, HTMLButtonElement>();
-    const selectTopic = (topic: string) => {
-      activeTopic = topic;
-      for (const [label, button] of buttons) {
-        button.setAttribute('aria-pressed', String(label === topic));
-      }
-    };
-
-    for (const topic of ['', ...topics]) {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.textContent = topic || 'All posts';
-      buttons.set(topic, button);
-      filters.append(button);
-      button.addEventListener('click', () => {
-        selectTopic(topic);
-        update();
-      });
-    }
-    selectTopic('');
-
-    // Give dynamically created controls the same Astro style scope.
-    const scope = controls.getAttributeNames().find((name) => name.startsWith('data-astro-cid-'));
-    if (scope) {
-      filters.setAttribute(scope, '');
-      for (const button of buttons.values()) button.setAttribute(scope, '');
-    }
-    controls.prepend(filters);
+    const topic = controls.querySelector<HTMLSelectElement>('[data-blog-topic]');
+    if (!topic) throw new Error('Blog topic selector is missing.');
     reset.textContent = 'Clear search and filters';
     const update = () => {
       const words = input.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
       let visible = 0;
       for (const entry of entries) {
         const text = (entry.dataset.blogSearchable ?? '').toLowerCase();
-        const matchesTopic = !activeTopic || postTopics.get(entry)?.includes(activeTopic);
+        const matchesTopic = !topic.value || postTopics.get(entry)?.includes(topic.value);
         entry.hidden = !matchesTopic || !words.every((word) => text.includes(word));
         if (!entry.hidden) visible++;
       }
       status.textContent = visible === 0
         ? 'No matching posts'
         : visible === 1 ? '1 post' : visible + ' posts';
-      reset.hidden = !words.length && !activeTopic;
+      reset.hidden = !words.length && !topic.value;
     };
 
+    topic.addEventListener('change', update);
     input.addEventListener('input', update);
     reset.addEventListener('click', () => {
       input.value = '';
-      selectTopic('');
+      topic.value = '';
       update();
       input.focus();
     });

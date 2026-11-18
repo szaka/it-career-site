@@ -352,3 +352,21 @@ body:has(.portfolio-header) article .title .entry-meta {
   border-inline-start: 1px solid #d8d5cd;
   padding-inline-start: 0.75rem;
 }
+
+/* Audit: keyboard focus, zoom reflow, and article tables. */
+body:has(.portfolio-header) main { min-width: 0; }
+body:has(.portfolio-header) main :is(p, li, h1, h2, h3) { overflow-wrap: anywhere; }
+body:has(.portfolio-header) main table { display: block; max-width: 100%; overflow-x: auto; }
+body:has(.portfolio-header) :is(a, button, select, input):focus-visible {
+  outline: 2px solid var(--pj-link); outline-offset: 3px;
+}
+body:has(.portfolio-header) main .prose figcaption { color: var(--pj-muted); }
+
+
+/* Recognizable links within prose. */
+body:has(.portfolio-header) main :is(p, li, figcaption)
+  a[href]:not(.resume-link):not(.primary-link):not(.contact-primary) {
+  text-decoration: underline !important;
+  text-decoration-thickness: .06em;
+  text-underline-offset: .18em;
+}

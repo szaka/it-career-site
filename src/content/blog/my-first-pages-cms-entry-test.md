@@ -27,5 +27,5 @@ a^2 + b^2
 3. hello-2
 4. test-2
 
-![Blue Sky, Victorian Girl is Holding an Umbrella.](/images/blog/privateimages99758d99758d9d-c10b-4d02-a198-7e49afb1f3a6__0.jpg)
+![Blue Sky, Victorian Girl is Holding an Umbrella.](/images/blog/privateimages99758d99758d9d-c10b-4d02-a198-7e49afb1f3a6__0.webp)
 

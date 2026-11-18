@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Generated local audit reports
+site-audit-results.json
+site-audit-report.txt

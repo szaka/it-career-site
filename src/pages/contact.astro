@@ -16,7 +16,11 @@ import PortfolioPage from '../layouts/PortfolioPage.astro';
 
   <p class="contact-actions">
     <a class="contact-primary" href="https://www.linkedin.com/in/shahid-zaka/" data-contact-primary>
-      Connect on LinkedIn <span aria-hidden="true">→</span>
+      Connect on LinkedIn <svg width="16" height="16" viewBox="0 0 16 16"
+        fill="none" stroke="currentColor" stroke-width="1.5"
+        aria-hidden="true" focusable="false">
+        <path d="M2 8h11M9 4l4 4-4 4" />
+      </svg>
     </a>
   </p>
 
@@ -74,57 +78,6 @@ import PortfolioPage from '../layouts/PortfolioPage.astro';
 
 
 <style>
-  .contact-map { margin-block-start: .8rem; }
-  .contact-map [hidden] { display: none !important; }
-  .contact-map button {
-    min-height: 44px;
-    padding: .35rem .7rem;
-    border: 1px solid var(--pj-link);
-    border-radius: .35rem;
-    background: var(--pj-card);
-    color: var(--pj-link);
-    font: inherit;
-    cursor: pointer;
-  }
-  .contact-map button:hover { background: var(--pj-tint); }
-  #suffolk-map {
-    margin-block: .8rem;
-    border: 1px solid var(--pj-line);
-    border-radius: .5rem;
-    overflow: hidden;
-  }
-  #suffolk-map :global(iframe) {
-    display: block;
-    width: 100%;
-    height: clamp(15rem, 45vw, 23rem);
-    border: 0;
-  }
-</style>
-
-<script>
-  const button = document.querySelector<HTMLButtonElement>('#show-suffolk-map');
-  const panel = document.getElementById('suffolk-map');
-
-  if (button && panel) {
-    button.hidden = false;
-    button.setAttribute('aria-expanded', 'false');
-    button.addEventListener('click', () => {
-      const opening = panel.hidden;
-      if (opening && !panel.firstElementChild) {
-        const frame = document.createElement('iframe');
-        frame.title = 'Regional map of Suffolk County, New York';
-        frame.referrerPolicy = 'no-referrer';
-        frame.src = 'https://www.openstreetmap.org/export/embed.html?bbox=-73.55%2C40.49%2C-71.72%2C41.35&layer=mapnik';
-        panel.append(frame);
-      }
-      panel.hidden = !opening;
-      button.setAttribute('aria-expanded', String(opening));
-      button.textContent = opening ? 'Hide Suffolk County map' : 'Show Suffolk County map';
-    });
-  }
-</script>
-
-<style>
   /* Contact action hierarchy */
   a[data-contact-primary],
   button[data-contact-map] {
@@ -160,26 +113,6 @@ import PortfolioPage from '../layouts/PortfolioPage.astro';
   }
 
   :is(a[data-contact-primary], button[data-contact-map]):focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 3px;
-  }
-</style>
-
-<style>
-  /* Contact map text control */
-  button[data-contact-map]:is(:link, :visited, :hover, :focus, :active, :enabled) {
-    appearance: none;
-    border: 0 !important;
-    background: transparent !important;
-    box-shadow: none;
-    padding-inline: 0;
-    min-height: 44px;
-    font-weight: 400;
-    text-decoration: underline;
-    text-underline-offset: .16em;
-  }
-
-  button[data-contact-map]:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 3px;
   }
