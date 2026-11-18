@@ -36,35 +36,52 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   <section class="portfolio-section about-site-notes" aria-labelledby="about-site-heading">
     <h2 id="about-site-heading">About this site</h2>
-    <section class="portfolio-section" id="site-build" aria-labelledby="site-build-heading">
-      <p>
-        I use this portfolio to share what I’m learning in IT support.
-        The write-ups show what I checked, what changed, and how I verified
-        the result. I write in Markdown, preview with Astro, and publish
-        through GitHub Pages.
-      </p>
+    <p>
+      I built this site to keep track of what I’m learning and share the
+      problems I work through. Each write-up explains what I tried, what
+      happened, and how I checked the result.
+    </p>
+    <p>
+      I write in Markdown, edit with VS Code or Pages CMS, and preview changes
+      locally with Astro. Git tracks my changes, and GitHub Actions builds
+      the site for GitHub Pages.
+    </p>
     <p class="portfolio-links">
-      <a href="https://github.com/szaka/it-career-site">View the site source</a>
-      <a href="../projects/astro-portfolio/">Read the deployment case study</a>
+      <a href="https://github.com/szaka/it-career-site">View the source on GitHub</a>
+      <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/projects/astro-portfolio/`}>Read how I built the site</a>
     </p>
 
-    <details>
-      <summary>What helped me build this site</summary>
-      <p>These are the tools I used to build and publish this site and the official guides I turned to when I got stuck. They helped me understand how the site works, check my fixes, and share my IT support projects.</p>
-      <ul data-about-resources>
-        <li><strong>Site and writing.</strong>{" "}<a href="https://docs.astro.build/en/guides/markdown-content/">Astro and Markdown</a>,{" "}<a href="https://code.visualstudio.com/docs/languages/markdown">VS Code Markdown editing</a>,{" "}and{" "}<a href="https://pagescms.org/docs/quick-start/">Pages CMS</a>.
-        </li>
-        <li><strong>Build and deployment.</strong>{" "}<a href="https://git-scm.com/docs">Git</a>,{" "}<a href="https://docs.npmjs.com/cli/commands/npm-ci">npm dependency installation</a>,{" "}<a href="https://docs.astro.build/en/guides/deploy/github/">Astro deployment with GitHub Actions and Pages</a>,{" "}and{" "}<a href="https://www.namecheap.com/support/knowledgebase/article.aspx/434/2237/how-do-i-set-up-host-records-for-a-domain/">Namecheap DNS</a>.
-        </li>
-        <li><strong>Design and checks.</strong>{" "}<a href="https://brailleinstitute.org/freefont">Atkinson Hyperlegible</a>{" "}for the local font files,
-          <a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a>{" "}as an accessibility
-          reference, and{" "}<a href="https://playwright.dev/docs/accessibility-testing">Playwright and axe</a>{" "}for automated browser checks.
-        </li>
-        <li><strong>AI and visitor-facing services.</strong>{" "}<a href="#ai-use">How I use ChatGPT</a>{" "}and{" "}<a href="../privacy/">how the site handles hosting, optional analytics, and maps</a>.
-        </li>
-      </ul>
-    </details>
-  </section>
+    <h3>Tools and guides I used</h3>
+    <p>These tools and their documentation helped me build, publish, and check the site.</p>
+    <ul data-about-resources>
+      <li>
+        <strong>Writing and editing.</strong>{" "}
+        <a href="https://docs.astro.build/en/guides/markdown-content/">Astro and Markdown</a>,{" "}
+        <a href="https://code.visualstudio.com/docs/languages/markdown">VS Code</a>, and{" "}
+        <a href="https://pagescms.org/docs/quick-start/">Pages CMS</a>.
+      </li>
+      <li>
+        <strong>Publishing.</strong>{" "}
+        <a href="https://git-scm.com/docs">Git</a>,{" "}
+        <a href="https://docs.npmjs.com/cli/commands/npm-ci">npm</a>,{" "}
+        <a href="https://docs.astro.build/en/guides/deploy/github/">GitHub Actions and Pages</a>, and{" "}
+        <a href="https://www.namecheap.com/support/knowledgebase/article.aspx/434/2237/how-do-i-set-up-host-records-for-a-domain/">Namecheap DNS</a>.
+      </li>
+      <li>
+        <strong>Readability and testing.</strong>{" "}
+        <a href="https://brailleinstitute.org/freefont">Atkinson Hyperlegible</a>{" "}
+        provides the fonts. I use{" "}
+        <a href="https://www.w3.org/TR/WCAG22/">WCAG 2.2</a>{" "}
+        as an accessibility reference and{" "}
+        <a href="https://playwright.dev/docs/accessibility-testing">Playwright with axe</a>{" "}
+        for automated browser checks.
+      </li>
+    </ul>
+    <p>
+      Read the{" "}
+      <a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/privacy/`}>Privacy page</a>{" "}
+      for details about hosting, optional analytics, and the map.
+    </p>
   </section>
 
   <section class="portfolio-section" aria-labelledby="accessibility-heading">
