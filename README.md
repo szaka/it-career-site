@@ -118,3 +118,7 @@ Deployment depends on the workflow configuration and whether it is enabled. Veri
 Built with Astro and Markdown, edited through VS Code and Pages CMS, and deployed with GitHub Actions and GitHub Pages.
 
 This project started from the Astro blog starter, whose styling was inspired by [Bear Blog](https://github.com/HermanMartinus/bearblog/). The About page lists additional tools and documentation used.
+
+## Development assistance
+
+ChatGPT assisted with site code, styling, documentation, and troubleshooting suggestions. I applied changes locally and ran builds and browser checks during development. This repository records the site’s development as I learn.
