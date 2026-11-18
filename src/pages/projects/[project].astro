@@ -1,7 +1,6 @@
 ---
 import PortfolioPage from '../../layouts/PortfolioPage.astro';
 import ReadingTime from '../../components/ReadingTime.astro';
-import AiDisclosure from '../../components/AiDisclosure.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import TopicLinks from '../../components/TopicLinks.astro';
 import { projectReadingBody, projectTopics } from '../../data/topics';
@@ -31,7 +30,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <TopicLinks tags={project.tags} />
   </div>
 
-  <AiDisclosure text={project.ai} />
   <p class="portfolio-intro">{project.summary}</p>
 
   <section class="portfolio-section" aria-label="Project results">

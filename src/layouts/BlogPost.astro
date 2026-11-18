@@ -1,6 +1,5 @@
 ---
 import ReadingTime from '../components/ReadingTime.astro';
-import AiDisclosure from '../components/AiDisclosure.astro';
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
@@ -85,7 +84,6 @@ const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
 						</div>
 						<hr />
 					</div>
-					<AiDisclosure text={Astro.props.aiDisclosure} />
 					<slot />
 				</div>
 			</article>
